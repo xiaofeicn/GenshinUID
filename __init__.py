@@ -1,15 +1,16 @@
-import asyncio,os,sys
+import asyncio, os, sys
 import base64
 
 from nonebot import (get_bot, get_driver, logger, on_command, on_startswith,
-                     on_regex,require)
+                     on_regex, require)
 from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
-                                         GroupMessageEvent, MessageEvent,
-                                         MessageSegment)
+                                     GroupMessageEvent, MessageEvent,
+                                     MessageSegment)
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
 from mihoyo_libs.get_data import *
 from mihoyo_libs.get_image import *
 from mihoyo_libs.get_mihoyo_bbs_data import *
@@ -84,7 +85,8 @@ async def push():
                 await bot.call_api(api='send_private_msg', **{'user_id': i['qid'], 'message': i['message']})
             else:
                 await bot.call_api(api='send_group_msg',
-                                   **{'group_id': i['gid'], 'message': MessageSegment.at(i['qid']) + f"\n{i['message']}"})
+                                   **{'group_id': i['gid'],
+                                      'message': MessageSegment.at(i['qid']) + f"\n{i['message']}"})
     else:
         pass
 
@@ -159,26 +161,29 @@ async def daily_sign():
                 logger.exception("签到报告发送失败：{}".format(i["push_message"]))
             await asyncio.sleep(4 + random.randint(1, 3))
 
+
 @get_char_adv.handle()
-async def send_char_adv(bot:Bot, event: MessageEvent):
+async def send_char_adv(bot: Bot, event: MessageEvent):
     try:
-        name = str(event.get_message()).strip().replace(" ","")[:-3]
+        name = str(event.get_message()).strip().replace(" ", "")[:-3]
         im = await char_adv(name)
         await get_char_adv.send(im)
     except Exception as e:
         logger.exception("获取建议失败。")
 
+
 @get_weapon_adv.handle()
-async def send_weapon_adv(bot:Bot, event: MessageEvent):
+async def send_weapon_adv(bot: Bot, event: MessageEvent):
     try:
-        name = str(event.get_message()).strip().replace(" ","")[:-3]
+        name = str(event.get_message()).strip().replace(" ", "")[:-3]
         im = await weapon_adv(name)
         await get_weapon_adv.send(im)
     except Exception as e:
         logger.exception("获取建议失败。")
 
+
 @get_audio.handle()
-async def send_audio(bot:Bot, event: MessageEvent):
+async def send_audio(bot: Bot, event: MessageEvent):
     message = str(event.get_message()).strip()
     message = message.replace('语音', "").replace(' ', "")
     name = ''.join(re.findall('[\u4e00-\u9fa5]', message))
@@ -197,7 +202,7 @@ async def send_audio(bot:Bot, event: MessageEvent):
 
 
 @get_lots.handle()
-async def send_lots(bot:Bot, event: MessageEvent):
+async def send_lots(bot: Bot, event: MessageEvent):
     try:
         qid = int(event.sender.user_id)
         raw_data = await get_a_lots(qid)
@@ -212,7 +217,7 @@ async def send_lots(bot:Bot, event: MessageEvent):
 
 
 @get_enemies.handle()
-async def send_enemies(bot:Bot, event: MessageEvent):
+async def send_enemies(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('原魔', "").replace(' ', "")
@@ -227,7 +232,7 @@ async def send_enemies(bot:Bot, event: MessageEvent):
 
 
 @get_food.handle()
-async def send_food(bot:Bot, event: MessageEvent):
+async def send_food(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('食物', "").replace(' ', "")
@@ -242,7 +247,7 @@ async def send_food(bot:Bot, event: MessageEvent):
 
 
 @get_artifacts.handle()
-async def send_artifacts(bot:Bot, event: MessageEvent):
+async def send_artifacts(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('圣遗物', "").replace(' ', "")
@@ -257,7 +262,7 @@ async def send_artifacts(bot:Bot, event: MessageEvent):
 
 
 @get_weapon.handle()
-async def send_weapon(bot:Bot, event: MessageEvent):
+async def send_weapon(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('武器', "")
@@ -287,8 +292,8 @@ async def send_talents(bot: Bot, event: MessageEvent):
         num = re.findall(r"[0-9]+", message)
         if len(num) == 1:
             im = await char_wiki(name, "talents", num[0])
-            if isinstance(im,list):
-                await bot.call_api("send_group_forward_msg",group_id=event.group_id, messages=im)
+            if isinstance(im, list):
+                await bot.call_api("send_group_forward_msg", group_id=event.group_id, messages=im)
                 return
         else:
             im = "参数不正确。"
@@ -302,7 +307,7 @@ async def send_talents(bot: Bot, event: MessageEvent):
 
 
 @get_char.handle()
-async def send_char(bot:Bot, event: MessageEvent):
+async def send_char(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('角色', "")
@@ -323,7 +328,7 @@ async def send_char(bot:Bot, event: MessageEvent):
 
 
 @get_cost.handle()
-async def send_cost(bot:Bot, event: MessageEvent):
+async def send_cost(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('材料', "")
@@ -339,7 +344,7 @@ async def send_cost(bot:Bot, event: MessageEvent):
 
 
 @get_polar.handle()
-async def send_polar(bot:Bot, event: MessageEvent):
+async def send_polar(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip()
         message = message.replace('命座', "")
@@ -359,7 +364,7 @@ async def send_polar(bot:Bot, event: MessageEvent):
 
 
 @get_event.handle()
-async def send_events(bot:Bot, event: MessageEvent):
+async def send_events(bot: Bot, event: MessageEvent):
     try:
         img_path = os.path.join(FILE_PATH, "event.jpg")
         while True:
@@ -382,7 +387,7 @@ async def send_events(bot:Bot, event: MessageEvent):
 
 
 @add_cookie.handle()
-async def add_cookie_func(bot:Bot, event: MessageEvent):
+async def add_cookie_func(bot: Bot, event: MessageEvent):
     try:
         mes = str(event.get_message()).strip().replace('添加', "")
         await deal_ck(mes, int(event.sender.user_id))
@@ -399,7 +404,7 @@ async def add_cookie_func(bot:Bot, event: MessageEvent):
 
 # 开启 自动签到 和 推送树脂提醒 功能
 @open_switch.handle()
-async def open_switch_func(bot:Bot, event: MessageEvent):
+async def open_switch_func(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('开启', "")
@@ -463,7 +468,7 @@ async def open_switch_func(bot:Bot, event: MessageEvent):
 
 # 关闭 自动签到 和 推送树脂提醒 功能
 @close_switch.handle()
-async def close_switch_func(bot:Bot, event: MessageEvent):
+async def close_switch_func(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('关闭', "")
@@ -523,7 +528,7 @@ async def close_switch_func(bot:Bot, event: MessageEvent):
 
 # 群聊内 每月统计 功能
 @monthly_data.handle()
-async def send_monthly_data(bot:Bot, event: MessageEvent):
+async def send_monthly_data(bot: Bot, event: MessageEvent):
     try:
         qid = int(event.sender.user_id)
         uid = await select_db(qid, mode="uid")
@@ -540,7 +545,7 @@ async def send_monthly_data(bot:Bot, event: MessageEvent):
 
 # 群聊内 签到 功能
 @get_sign.handle()
-async def get_sing_func(bot:Bot, event: MessageEvent):
+async def get_sing_func(bot: Bot, event: MessageEvent):
     try:
         qid = int(event.sender.user_id)
         uid = await select_db(qid, mode="uid")
@@ -571,7 +576,7 @@ async def check_cookies(bot: Bot):
                                **{'user_id': i[0],
                                   'message': "您绑定的Cookies（uid{}）已失效，以下功能将会受到影响：\n查看完整信息列表\n查看深渊配队\n自动签到/当前状态/每月统计\n"
                                              "请及时重新绑定Cookies并重新开关相应功能。".format(
-                                   i[1])})
+                                      i[1])})
             await asyncio.sleep(3 + random.randint(1, 3))
     except ActionFailed as e:
         await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
@@ -583,7 +588,7 @@ async def check_cookies(bot: Bot):
 
 # 群聊内 查询当前树脂状态以及派遣状态 的命令
 @daily_data.handle()
-async def send_daily_data(bot:Bot, event: MessageEvent):
+async def send_daily_data(bot: Bot, event: MessageEvent):
     try:
         uid = await select_db(int(event.sender.user_id), mode="uid")
         uid = uid[0]
@@ -603,7 +608,7 @@ async def send_daily_data(bot:Bot, event: MessageEvent):
 
 # 群聊内 查询uid 的命令
 @get_uid_info.handle()
-async def send_uid_info(bot:Bot, event: MessageEvent):
+async def send_uid_info(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('uid', "")
@@ -663,7 +668,7 @@ async def send_uid_info(bot:Bot, event: MessageEvent):
 
 # 群聊内 绑定uid 的命令，会绑定至当前qq号上
 @link_uid.handle()
-async def link_uid_to_qq(bot:Bot, event: MessageEvent):
+async def link_uid_to_qq(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('绑定uid', "")
@@ -680,7 +685,7 @@ async def link_uid_to_qq(bot:Bot, event: MessageEvent):
 
 # 群聊内 绑定米游社通行证 的命令，会绑定至当前qq号上，和绑定uid不冲突，两者可以同时绑定
 @link_mys.handle()
-async def link_mihoyo_bbs_to_qq(bot:Bot, event: MessageEvent):
+async def link_mihoyo_bbs_to_qq(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('绑定mys', "")
@@ -785,7 +790,7 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
 
 # 群聊内 查询米游社通行证 的命令
 @get_mys_info.handle()
-async def send_mihoyo_bbs_info(bot:Bot, event: MessageEvent):
+async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('mys', "")
@@ -850,6 +855,6 @@ all_recheck = on_command("全部重签", permission=SUPERUSER, priority=priority
 
 
 @all_recheck.handle()
-async def resign(bot:Bot, event: MessageEvent):
+async def resign(bot: Bot, event: MessageEvent):
     await all_recheck.send("已开始执行")
     await daily_sign_schedule()
