@@ -34,8 +34,8 @@ get_audio = on_startswith("语音", priority=priority)
 get_artifacts = on_startswith("圣遗物", priority=priority)
 get_food = on_startswith("食物", priority=priority)
 
-get_uid_info = on_startswith("uid", permission=GROUP, priority=priority)
-get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
+get_uid_info = on_startswith("uid", priority=priority)
+get_mys_info = on_startswith("mys", priority=priority)
 
 get_event = on_command("活动列表", priority=priority)
 get_lots = on_command("御神签", priority=priority)
@@ -51,7 +51,8 @@ daily_data = on_command("当前状态", priority=priority)
 
 add_cookie = on_startswith("添加", permission=PRIVATE_FRIEND, priority=priority)
 
-search = on_command("查询", permission=GROUP, priority=priority)
+#search = on_command("查询", permission=GROUP, priority=priority)
+search = on_command("查询", priority=priority)
 get_sign = on_command("签到", priority=priority)
 check = on_command("校验全部Cookies", priority=priority)
 
