@@ -15,6 +15,8 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from mihoyo_libs.get_data import *
 from mihoyo_libs.get_image import *
 from mihoyo_libs.get_mihoyo_bbs_data import *
+from mihoyo_libs.mihoyo_bot_feature.super_command import *
+from mihoyo_libs.mihoyo_bot_feature.query_mys_info import *
 
 config = get_driver().config
 priority = config.genshinuid_priority if config.genshinuid_priority else 2
@@ -68,7 +70,7 @@ get_weapon_adv = on_regex("[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
 TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
-FILE_PATH_1 = os.path.join(os.path.dirname(__file__), 'mihoyo_bot_feature')
+# FILE_PATH_1 = os.path.join(os.path.dirname(__file__), 'mihoyo_bot_feature')
 
 @get_char_adv.handle()
 async def send_char_adv(bot: Bot, event: MessageEvent):
