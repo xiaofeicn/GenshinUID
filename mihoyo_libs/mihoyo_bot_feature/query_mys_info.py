@@ -3,7 +3,7 @@ import base64
 
 from src.plugins.GenshinUID import get_uid_info, draw_abyss_pic, draw_abyss0_pic, get_lots, draw_pic, get_mys_info, \
     search, select_db, draw_word_cloud
-from nonebot import logger, get_driver
+from nonebot import logger, get_driver, on_startswith, on_command
 from nonebot.adapters.cqhttp import Bot,MessageEvent,MessageSegment
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
@@ -12,6 +12,12 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 config = get_driver().config
 priority = config.genshinuid_priority if config.genshinuid_priority else 2
 superusers = {int(x) for x in config.superusers}
+
+# 米游社查询个人信息
+get_uid_info = on_startswith("#uid", priority=priority)
+get_mys_info = on_startswith("#mys", priority=priority)
+search = on_command("查询", priority=priority)
+
 
 """
 查询uid 的命令
