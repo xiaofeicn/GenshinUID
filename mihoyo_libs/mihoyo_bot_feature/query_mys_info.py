@@ -1,12 +1,15 @@
 import asyncio, os, sys, re
 import base64
-
-from src.plugins.GenshinUID import get_uid_info, draw_abyss_pic, draw_abyss0_pic, get_lots, draw_pic, get_mys_info, \
-    search, select_db, draw_word_cloud
+#
+# from src.plugins.GenshinUID import get_uid_info, draw_abyss_pic, draw_abyss0_pic, get_lots, draw_pic, get_mys_info, \
+#     search, select_db, draw_word_cloud
 from nonebot import logger, get_driver, on_startswith, on_command
 from nonebot.adapters.cqhttp import Bot,MessageEvent,MessageSegment
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
+
+from mihoyo_libs.get_image import *
+from mihoyo_libs.get_mihoyo_bbs_data import *
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 config = get_driver().config
