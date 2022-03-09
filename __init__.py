@@ -9,6 +9,7 @@ from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
+
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from mihoyo_libs.get_data import *
@@ -47,8 +48,8 @@ get_lots = on_command("御神签", priority=priority)
 get_sign = on_command("签到", priority=priority)
 monthly_data = on_command("每月统计", priority=priority)
 daily_data = on_command("当前状态", priority=priority)
-open_switch = on_startswith("开启", priority=priority)
-close_switch = on_startswith("关闭", priority=priority)
+open_switch = on_command("开启", priority=priority)
+close_switch = on_command("关闭", priority=priority)
 
 # bot信息绑定
 link_mys = on_startswith("绑定mys", priority=priority)
@@ -67,7 +68,7 @@ get_weapon_adv = on_regex("[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
 TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
-
+FILE_PATH_1 = os.path.join(os.path.dirname(__file__), 'mihoyo_bot_feature')
 
 @get_char_adv.handle()
 async def send_char_adv(bot: Bot, event: MessageEvent):
