@@ -1,7 +1,7 @@
 import asyncio, os, sys, re, random
 import base64
 
-from src.plugins.GenshinUID import get_lots, check, check_db
+from mian_command import get_lots, check, check_db
 from nonebot import (get_driver, logger)
 from nonebot.adapters.cqhttp import (Bot)
 from nonebot.adapters.cqhttp.exception import ActionFailed

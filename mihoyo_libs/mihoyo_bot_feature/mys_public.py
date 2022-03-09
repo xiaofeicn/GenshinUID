@@ -1,7 +1,7 @@
 import asyncio, os, sys, re
 import base64
 
-from src.plugins.GenshinUID import get_lots, FILE_PATH, get_event
+from mian_command  import get_lots, FILE_PATH, get_event
 from nonebot import get_driver, logger
 from nonebot.adapters.cqhttp import Bot, MessageEvent, MessageSegment
 from nonebot.adapters.cqhttp.exception import ActionFailed

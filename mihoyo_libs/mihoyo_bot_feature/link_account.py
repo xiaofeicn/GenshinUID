@@ -1,6 +1,6 @@
 import asyncio, os, sys, re
 import base64
-from src.plugins.GenshinUID import link_mys, get_lots, connect_db, link_uid
+from mian_command import link_mys, get_lots, connect_db, link_uid
 from nonebot import get_driver, logger
 from nonebot.adapters.cqhttp import Bot, MessageEvent
 from nonebot.adapters.cqhttp.exception import ActionFailed

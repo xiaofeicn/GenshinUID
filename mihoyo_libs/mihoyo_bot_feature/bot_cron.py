@@ -1,7 +1,7 @@
 import asyncio, os, sys, re
 import base64
 import random
-from src.plugins.GenshinUID import sign, config_check, draw_event_schedule, draw_event_pic, clean_cache_schedule, \
+from mian_command  import sign, config_check, draw_event_schedule, draw_event_pic, clean_cache_schedule, \
     delete_cache, resin_notic_schedule, daily, sqlite3, daily_sign_schedule
 from nonebot import (get_bot, get_driver, logger)
 from nonebot.adapters.cqhttp import (MessageSegment)

@@ -1,6 +1,6 @@
 import asyncio, os, sys, re
 
-from src.plugins.GenshinUID import get_lots, select_db, get_sign, sign, monthly_data, close_switch, open_push, \
+from mian_command  import get_lots, select_db, get_sign, sign, monthly_data, close_switch, open_push, \
     config_check, open_switch, award, daily_data, daily, daily_sign_schedule, all_recheck
 from nonebot import get_driver, logger
 from nonebot.adapters.cqhttp import Bot, MessageEvent
