@@ -244,8 +244,10 @@ async def deal_ck(mes, qid):
     for i in mys_data['data']['list']:
         if i['game_id'] != 2:
             mys_data['data']['list'].remove(i)
-    uid = mys_data['data']['list'][0]['game_role_id']
-
+    try:
+        uid = mys_data['data']['list'][0]['game_role_id']
+    except:
+        uid=123
     conn = sqlite3.connect('ID_DATA.db')
     c = conn.cursor()
 
