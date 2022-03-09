@@ -3,11 +3,8 @@ import base64
 
 from src.plugins.GenshinUID import get_uid_info, draw_abyss_pic, draw_abyss0_pic, get_lots, draw_pic, get_mys_info, \
     search, select_db, draw_word_cloud
-from nonebot import (get_bot, get_driver, logger, on_command, on_startswith,
-                     on_regex, require)
-from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
-                                     GroupMessageEvent, MessageEvent,
-                                     MessageSegment)
+from nonebot import logger, get_driver
+from nonebot.adapters.cqhttp import Bot,MessageEvent,MessageSegment
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
@@ -16,8 +13,11 @@ config = get_driver().config
 priority = config.genshinuid_priority if config.genshinuid_priority else 2
 superusers = {int(x) for x in config.superusers}
 
+"""
+查询uid 的命令
+"""
 
-# 查询uid 的命令
+
 @get_uid_info.handle()
 async def send_uid_info(bot: Bot, event: MessageEvent):
     try:
@@ -144,7 +144,11 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
         logger.exception("米游社查询异常")
 
 
-# 群聊内 绑定过uid/mysid的情况下，可以查询，默认优先调用米游社通行证，多出世界等级一个参数
+"""
+绑定过uid/mysid的情况下，可以查询，默认优先调用米游社通行证，多出世界等级一个参数
+"""
+
+
 @search.handle()
 async def get_info(bot: Bot, event: MessageEvent):
     try:

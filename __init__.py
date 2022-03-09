@@ -34,31 +34,35 @@ get_audio = on_startswith("语音", priority=priority)
 get_artifacts = on_startswith("圣遗物", priority=priority)
 get_food = on_startswith("食物", priority=priority)
 
+# 米游社查询个人信息
 get_uid_info = on_startswith("#uid", priority=priority)
 get_mys_info = on_startswith("#mys", priority=priority)
+search = on_command("查询", priority=priority)
 
+# 米游社查询公共信息
 get_event = on_command("活动列表", priority=priority)
 get_lots = on_command("御神签", priority=priority)
 
+# 米游社功能 签到|树脂
+get_sign = on_command("签到", priority=priority)
+monthly_data = on_command("每月统计", priority=priority)
+daily_data = on_command("当前状态", priority=priority)
 open_switch = on_startswith("开启", priority=priority)
 close_switch = on_startswith("关闭", priority=priority)
 
+# bot信息绑定
 link_mys = on_startswith("绑定mys", priority=priority)
 link_uid = on_startswith("绑定uid", priority=priority)
 
-monthly_data = on_command("每月统计", priority=priority)
-daily_data = on_command("当前状态", priority=priority)
-
+# cookie
 add_cookie = on_startswith("添加", permission=PRIVATE_FRIEND, priority=priority)
 
-search = on_command("查询", priority=priority)
-get_sign = on_command("签到", priority=priority)
-check = on_command("校验全部Cookies", priority=priority)
-
+# 管理员
+check = on_command("校验全部Cookies", permission=SUPERUSER, priority=priority)
+all_recheck = on_command("#全部重签", permission=SUPERUSER, priority=priority)
+# other
 get_char_adv = on_regex("[\u4e00-\u9fa5]+(用什么|能用啥|怎么养)", priority=priority)
 get_weapon_adv = on_regex("[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能用)", priority=priority)
-
-all_recheck = on_command("#全部重签", permission=SUPERUSER, priority=priority)
 
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')

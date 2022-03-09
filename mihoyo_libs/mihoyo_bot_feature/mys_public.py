@@ -1,13 +1,9 @@
 import asyncio, os, sys, re
 import base64
 
-from src.plugins.GenshinUID import get_lots, select_db, get_sign, sign, monthly_data, close_switch, open_push, \
-    config_check, open_switch, award, FILE_PATH, get_event
-from nonebot import (get_bot, get_driver, logger, on_command, on_startswith,
-                     on_regex, require)
-from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
-                                     GroupMessageEvent, MessageEvent,
-                                     MessageSegment)
+from src.plugins.GenshinUID import get_lots, FILE_PATH, get_event
+from nonebot import get_driver, logger
+from nonebot.adapters.cqhttp import Bot, MessageEvent, MessageSegment
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 

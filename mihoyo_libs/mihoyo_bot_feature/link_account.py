@@ -1,13 +1,8 @@
-# 群聊内 绑定米游社通行证 的命令，会绑定至当前qq号上，和绑定uid不冲突，两者可以同时绑定
-from src.plugins.GenshinUID import link_mys, get_lots, connect_db, link_uid
 import asyncio, os, sys, re
 import base64
-
-from nonebot import (get_bot, get_driver, logger, on_command, on_startswith,
-                     on_regex, require)
-from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
-                                     GroupMessageEvent, MessageEvent,
-                                     MessageSegment)
+from src.plugins.GenshinUID import link_mys, get_lots, connect_db, link_uid
+from nonebot import get_driver, logger
+from nonebot.adapters.cqhttp import Bot, MessageEvent
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
