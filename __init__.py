@@ -178,19 +178,19 @@ async def send_food(bot: Bot, event: MessageEvent):
         logger.exception("获取食物信息错误")
 
 
-@get_artifacts.handle()
-async def send_artifacts(bot: Bot, event: MessageEvent):
-    try:
-        message = str(event.get_message()).strip()
-        message = message.replace('圣遗物', "").replace(' ', "")
-        im = await artifacts_wiki(message)
-        await get_artifacts.send(im)
-    except ActionFailed as e:
-        await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送圣遗物信息失败")
-    except Exception as e:
-        await get_artifacts.send("发生错误 {},请检查后台输出。".format(e))
-        logger.exception("获取圣遗物信息错误")
+# @get_artifacts.handle()
+# async def send_artifacts(bot: Bot, event: MessageEvent):
+#     try:
+#         message = str(event.get_message()).strip()
+#         message = message.replace('圣遗物', "").replace(' ', "")
+#         im = await artifacts_wiki(message)
+#         await get_artifacts.send(im)
+#     except ActionFailed as e:
+#         await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
+#         logger.exception("发送圣遗物信息失败")
+#     except Exception as e:
+#         await get_artifacts.send("发生错误 {},请检查后台输出。".format(e))
+#         logger.exception("获取圣遗物信息错误")
 
 
 @get_weapon.handle()
@@ -881,7 +881,7 @@ async def get_info(bot: Bot, event: MessageEvent):
                     await search.send("获取失败，可能是Cookies失效或者未打开米游社角色详情开关。")
                     logger.exception("深渊数据获取失败（Cookie失效/不公开信息）")
                 except Exception:
-                    await search.send('获取失败，请检查 cookie 及网络状态。')
+                    await search.send('获取失败，本次深渊未打或cooike')
                     logger.exception("深渊数据获取失败（数据状态问题）")
             elif m == "上期深渊":
                 try:
