@@ -58,7 +58,7 @@ link_uid = on_startswith("绑定uid", priority=priority)
 add_cookie = on_startswith("添加", permission=PRIVATE_FRIEND, priority=priority)
 
 # 手册
-use_book = on_command("手册", priority=priority)
+use_book = on_command("help", priority=priority)
 
 # 管理员
 check = on_command("校验全部Cookies", permission=SUPERUSER, priority=priority)
