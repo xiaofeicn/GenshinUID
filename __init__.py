@@ -88,7 +88,7 @@ async def use_book_func(bot: Bot, event: MessageEvent):
          "当前状态 --> 当前任务|树脂|派遣【需绑定自己的cookie】\n"\
          "查看其他功能请发送 help\n"
     try:
-        await use_book_func.send(im, at_sender=False)
+        await use_book.send(im, at_sender=False)
     except ActionFailed as e:
         await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
         logger.exception("发送签到信息失败")
