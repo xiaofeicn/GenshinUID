@@ -9,7 +9,6 @@ from nonebot.adapters.cqhttp import (GROUP, PRIVATE_FRIEND, Bot,
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
-
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from mihoyo_libs.get_data import *
@@ -58,9 +57,13 @@ link_uid = on_startswith("绑定uid", priority=priority)
 # cookie
 add_cookie = on_startswith("添加", permission=PRIVATE_FRIEND, priority=priority)
 
+# 手册
+use_book = on_command("手册", priority=priority)
+
 # 管理员
 check = on_command("校验全部Cookies", permission=SUPERUSER, priority=priority)
 all_recheck = on_command("#全部重签", permission=SUPERUSER, priority=priority)
+
 # other
 get_char_adv = on_regex("[\u4e00-\u9fa5]+(用什么|能用啥|怎么养)", priority=priority)
 get_weapon_adv = on_regex("[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能用)", priority=priority)
@@ -68,7 +71,27 @@ get_weapon_adv = on_regex("[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
 TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
+
+
 # FILE_PATH_1 = os.path.join(os.path.dirname(__file__), 'mihoyo_bot_feature')
+
+@use_book.handle()
+async def use_book_func(bot: Bot, event: MessageEvent):
+    im = "绑定mys+通行证ID  --> 绑定通行证\n" \
+         "绑定uid+uid --> 绑定UID\n" \
+         "原魔公子 --> 原魔数据\n" \
+         "#uid+uid --> 查询此uid数据\n" \
+         "#mys+通行证ID --> 查询此通行证数据\n" \
+         "添加+空格+cookie --> 添加自己cookie【仅限好友私聊】\n" \
+         "签到 --> 米游社签到【需绑定自己的cookie】\n"\
+         "每月统计 --> 当月原石摩拉收入【需绑定自己的cookie】\n"\
+         "当前状态 --> 当前任务|树脂|派遣【需绑定自己的cookie】\n"
+    try:
+        await get_sign.send(im, at_sender=True)
+    except ActionFailed as e:
+        await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
+        logger.exception("发送签到信息失败")
+
 
 @get_char_adv.handle()
 async def send_char_adv(bot: Bot, event: MessageEvent):
@@ -122,7 +145,6 @@ async def send_lots(bot: Bot, event: MessageEvent):
     except Exception as e:
         await get_lots.send("发生错误 {},请检查后台输出。".format(e))
         logger.exception("获取御神签错误")
-
 
 
 @get_enemies.handle()
@@ -271,6 +293,7 @@ async def send_polar(bot: Bot, event: MessageEvent):
         await get_polar.send("发生错误 {},请检查后台输出。".format(e))
         logger.exception("获取命座信息错误")
 
+
 """
 添加 cookie 功能
 """
@@ -290,6 +313,7 @@ async def add_cookie_func(bot: Bot, event: MessageEvent):
     except Exception as e:
         await add_cookie.send('校验失败！请输入正确的Cookies！\n错误信息为{}'.format(e))
         logger.exception("Cookie校验失败")
+
 
 @draw_event_schedule.scheduled_job('cron', hour='2')
 async def draw_event():
@@ -401,6 +425,7 @@ async def daily_sign():
                 logger.exception("签到报告发送失败：{}".format(i["push_message"]))
             await asyncio.sleep(4 + random.randint(1, 3))
 
+
 """
 绑定uid 的命令，会绑定至当前qq号上
 """
@@ -441,6 +466,7 @@ async def link_mihoyo_bbs_to_qq(bot: Bot, event: MessageEvent):
     except Exception as e:
         await link_mys.send("发生错误 {},请检查后台输出。".format(e))
         logger.exception("绑定米游社通行证异常")
+
 
 """
 签到 功能
@@ -904,6 +930,7 @@ async def get_info(bot: Bot, event: MessageEvent):
     except Exception as e:
         await search.send("发生错误 {},请检查后台输出。".format(e))
         logger.exception("查询异常")
+
 
 """
 校验Cookies 是否正常的功能，不正常自动删掉
