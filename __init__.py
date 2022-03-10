@@ -85,7 +85,8 @@ async def use_book_func(bot: Bot, event: MessageEvent):
          "添加+空格+cookie --> 添加自己cookie【仅限好友私聊】\n" \
          "签到 --> 米游社签到【需绑定自己的cookie】\n"\
          "每月统计 --> 当月原石摩拉收入【需绑定自己的cookie】\n"\
-         "当前状态 --> 当前任务|树脂|派遣【需绑定自己的cookie】\n"
+         "当前状态 --> 当前任务|树脂|派遣【需绑定自己的cookie】\n"\
+         "查看其他功能请发送 help\n"
     try:
         await get_sign.send(im, at_sender=False)
     except ActionFailed as e:
