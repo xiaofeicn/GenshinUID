@@ -87,7 +87,7 @@ async def use_book_func(bot: Bot, event: MessageEvent):
          "每月统计 --> 当月原石摩拉收入【需绑定自己的cookie】\n"\
          "当前状态 --> 当前任务|树脂|派遣【需绑定自己的cookie】\n"
     try:
-        await get_sign.send(im, at_sender=True)
+        await get_sign.send(im, at_sender=False)
     except ActionFailed as e:
         await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
         logger.exception("发送签到信息失败")
