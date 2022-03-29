@@ -628,7 +628,7 @@ async def send_genshin_info(bot: Bot, event: MessageEvent):
         image = re.search(r"\[CQ:image,file=(.*),url=(.*)]", message)
         uid = uid[0]
         im = await draw_info_pic(uid,image)
-        await get_genshin_info.send(MessageSegment.image(im), at_sender=True)
+        await get_genshin_info.send(MessageSegment.image(im), at_sender=False)
     except ActionFailed as e:
         await get_genshin_info.send("机器人发送消息失败：{}".format(e.info['wording']))
         logger.exception("发送每月统计信息失败")
@@ -644,7 +644,7 @@ async def send_monthly_data(bot: Bot, event: MessageEvent):
         uid = await select_db(qid, mode="uid")
         uid = uid[0]
         im = await award(uid)
-        await monthly_data.send(im, at_sender=True)
+        await monthly_data.send(im, at_sender=False)
     except ActionFailed as e:
         await monthly_data.send("机器人发送消息失败：{}".format(e.info['wording']))
         logger.exception("发送每月统计信息失败")
@@ -755,15 +755,15 @@ async def send_uid_info(bot:Bot, event: MessageEvent):
                     floor_num = re.findall(r"\d+", message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image)
                     if im.startswith("base64://"):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_uid_info.send(im, at_sender=True)
+                        await get_uid_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image)
                     if im.startswith("base64://"):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_uid_info.send(im, at_sender=True)
+                        await get_uid_info.send(im, at_sender=False)
             except ActionFailed as e:
                 await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
                 logger.exception("发送uid深渊信息失败")
@@ -779,15 +779,15 @@ async def send_uid_info(bot:Bot, event: MessageEvent):
                     floor_num = re.findall(r"\d+", message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 2, "2")
                     if im.startswith("base64://"):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_uid_info.send(im, at_sender=True)
+                        await get_uid_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 2, "2")
                     if im.startswith("base64://"):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_uid_info.send(im, at_sender=True)
+                        await get_uid_info.send(im, at_sender=False)
             except TypeError:
                 await get_uid_info.send("获取失败，可能是Cookies失效或者未打开米游社角色详情开关。")
                 logger.exception("上期深渊数据获取失败（Cookie失效/不公开信息）")
@@ -798,9 +798,9 @@ async def send_uid_info(bot:Bot, event: MessageEvent):
             try:
                 im = await draw_pic(uid, event.sender.nickname, image, 2)
                 if im.startswith("base64://"):
-                    await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                    await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                 else:
-                    await get_uid_info.send(im, at_sender=True)
+                    await get_uid_info.send(im, at_sender=False)
             except ActionFailed as e:
                 await get_lots.send("机器人发送消息失败：{}".format(e.info['wording']))
                 logger.exception("发送uid信息失败")
@@ -875,15 +875,15 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
                         floor_num = re.findall(r"\d+", message)[0]
                         im = await draw_abyss_pic(uid[0], nickname, floor_num, image, uid[1])
                         if im.startswith("base64://"):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
-                            await search.send(im, at_sender=True)
+                            await search.send(im, at_sender=False)
                     else:
                         im = await draw_abyss0_pic(uid[0], nickname, image, uid[1])
                         if im.startswith("base64://"):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
-                            await search.send(im, at_sender=True)
+                            await search.send(im, at_sender=False)
                 except ActionFailed as e:
                     await search.send("机器人发送消息失败：{}".format(e.info['wording']))
                     logger.exception("发送uid深渊信息失败")
@@ -899,15 +899,15 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
                         floor_num = re.findall(r"\d+", message)[0]
                         im = await draw_abyss_pic(uid[0], nickname, floor_num, image, uid[1], "2")
                         if im.startswith("base64://"):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
-                            await search.send(im, at_sender=True)
+                            await search.send(im, at_sender=False)
                     else:
                         im = await draw_abyss0_pic(uid[0], nickname, image, uid[1], "2")
                         if im.startswith("base64://"):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
-                            await search.send(im, at_sender=True)
+                            await search.send(im, at_sender=False)
                 except ActionFailed as e:
                     await search.send("机器人发送消息失败：{}".format(e.info['wording']))
                     logger.exception("发送uid上期深渊信息失败")
@@ -921,9 +921,9 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
                 try:
                     im = await draw_word_cloud(uid[0], image, uid[1])
                     if im.startswith("base64://"):
-                        await search.send(MessageSegment.image(im), at_sender=True)
+                        await search.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await search.send(im, at_sender=True)
+                        await search.send(im, at_sender=False)
                 except ActionFailed as e:
                     await search.send("机器人发送消息失败：{}".format(e.info['wording']))
                     logger.exception("发送uid词云信息失败")
@@ -937,9 +937,9 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
                 try:
                     im = await draw_pic(uid[0], nickname, image, uid[1])
                     if im.startswith("base64://"):
-                        await search.send(MessageSegment.image(im), at_sender=True)
+                        await search.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await search.send(im, at_sender=True)
+                        await search.send(im, at_sender=False)
                 except ActionFailed as e:
                     await search.send("机器人发送消息失败：{}".format(e.info['wording']))
                     logger.exception("发送uid信息失败")
@@ -973,15 +973,15 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r"\d+", message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 3)
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_mys_info.send(im, at_sender=True)
+                        await get_mys_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 3)
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_mys_info.send(im, at_sender=True)
+                        await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
                 await get_mys_info.send("机器人发送消息失败：{}".format(e.info['wording']))
                 logger.exception("发送米游社深渊信息失败")
@@ -997,15 +997,15 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r"\d+", message)[0]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 3, "2")
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_mys_info.send(im, at_sender=True)
+                        await get_mys_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 3, "2")
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
-                        await get_mys_info.send(im, at_sender=True)
+                        await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
                 await get_mys_info.send("机器人发送消息失败：{}".format(e.info['wording']))
                 logger.exception("发送uid上期深渊信息失败")
@@ -1019,9 +1019,9 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
             try:
                 im = await draw_pic(uid, event.sender.nickname, image, 3)
                 if im.startswith("base64://"):
-                    await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                    await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                 else:
-                    await get_mys_info.send(im, at_sender=True)
+                    await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
                 await get_mys_info.send("机器人发送消息失败：{}".format(e.info['wording']))
                 logger.exception("发送米游社信息失败")
