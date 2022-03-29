@@ -745,7 +745,7 @@ async def send_daily_data(bot: Bot, event: MessageEvent):
 async def send_uid_info(bot:Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
-            ' ', "").replace('uid', "")
+            ' ', "").replace('#uid', "")
         image = re.search(r"\[CQ:image,file=(.*),url=(.*)]", message)
         uid = re.findall(r"\d+", message)[0]  # str
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
@@ -963,7 +963,7 @@ async def get_info(bot: Bot, event: GroupMessageEvent):
 async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
-            ' ', "").replace('mys', "")
+            ' ', "").replace('#mys', "")
         image = re.search(r"\[CQ:image,file=(.*),url=(.*)]", message)
         uid = re.findall(r"\d+", message)[0]  # str
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
