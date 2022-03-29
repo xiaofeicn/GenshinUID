@@ -103,6 +103,8 @@ async def use_book_func(bot: Bot, event: MessageEvent):
          "每月统计 👉  当月原石摩拉收入【需绑定自己的cookie】\n" \
          "当前状态 👉  当前任务|树脂|派遣【需绑定自己的cookie】\n" \
          "当前信息 👉  当前状态图片版\n" \
+         "gs开启 👉  开启米游社自动签到【需绑定自己的cookie】\n" \
+         "gs关闭 👉  关闭米游社自动签到【需绑定自己的cookie】\n" \
          "角色+角色名称 👉  角色信息\n" \
          "武器+角色名称 👉  武器信息\n" \
          "材料+角色名称 👉  材料信息\n" \
@@ -851,7 +853,7 @@ async def link_mihoyo_bbs_to_qq(bot: Bot, event: MessageEvent):
 
 # 群聊内 绑定过uid/mysid的情况下，可以查询，默认优先调用米游社通行证，多出世界等级一个参数
 @search.handle()
-async def get_info(bot: Bot, event: GroupMessageEvent):
+async def get_info(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
             ' ', "").replace('查询', "")

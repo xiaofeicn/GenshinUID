@@ -24,7 +24,7 @@ open_switch = on_startswith("开启", priority=priority)
 close_switch = on_startswith("关闭", priority=priority)
 all_genshinsign_recheck = on_command("全部重签", permission=SUPERUSER, priority=priority)
 all_bbscoin_recheck = on_command("全部重获取", permission=SUPERUSER, priority=priority)
-
+get_genshin_info = on_command("当前信息", priority=priority)
 """
 签到 功能
 """
@@ -94,6 +94,26 @@ async def send_daily_data(bot: Bot, event: MessageEvent):
         await daily_data.send("发生错误 {},请检查后台输出。".format(e))
         logger.exception("查询当前状态错误")
 
+"""
+查询当前树脂状态以及派遣状态 功能 图片版
+"""
+@get_genshin_info.handle()
+async def send_genshin_info(bot: Bot, event: MessageEvent):
+    try:
+        message = str(event.get_message()).strip().replace(
+            ' ', "")
+        qid = int(event.sender.user_id)
+        uid = await select_db(qid, mode="uid")
+        image = re.search(r"\[CQ:image,file=(.*),url=(.*)]", message)
+        uid = uid[0]
+        im = await draw_info_pic(uid,image)
+        await get_genshin_info.send(MessageSegment.image(im), at_sender=False)
+    except ActionFailed as e:
+        await get_genshin_info.send("机器人发送消息失败：{}".format(e.info['wording']))
+        logger.exception("发送每月统计信息失败")
+    except Exception:
+        await get_genshin_info.send('未找到绑定信息', at_sender=True)
+        logger.exception("获取/发送每月统计失败")
 
 """
 开启 自动签到 和 推送树脂提醒 功能
