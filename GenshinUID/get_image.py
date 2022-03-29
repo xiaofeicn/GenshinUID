@@ -510,7 +510,8 @@ async def draw_word_cloud(uid: str, image: Optional[str] = None, mode: int = 2):
     wc = WordCloud(
         font_path=os.path.join(FILE2_PATH, "yuanshen.ttf"),
         mask=mask,
-        background_color="rgba(255, 255, 255, 0)",
+        #background_color="rgba(255, 255, 255, 0)",
+        background_color="rgba(255, 204, 204, 0)",
         mode="RGBA",
         max_words=200,
         max_font_size=80
