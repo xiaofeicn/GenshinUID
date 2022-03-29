@@ -1,6 +1,6 @@
 import json
 import asyncio
-from typing import Optional, Union, Any
+from typing import Optional, Union, Any, Tuple
 import os,time
 import math
 import threading
@@ -65,7 +65,7 @@ class customize_image:
 
         return bg_img
 
-    def get_bg_color(self,edit_bg:Image) -> tuple[int, int, int]:
+    def get_bg_color(self,edit_bg:Image) -> Tuple[int, int, int]:
         # 获取背景主色
         color = 8
         q = edit_bg.quantize(colors=color, method=2)
@@ -82,7 +82,7 @@ class customize_image:
             #    bg_color = bg
         return bg_color
 
-    def get_text_color(self,bg_color: tuple[int, int, int]) -> tuple[int, int, int]:
+    def get_text_color(self, bg_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         # 通过背景主色（bg_color）确定文字主色
         r = 125
         if max(*bg_color) > 255 - r:
@@ -92,7 +92,7 @@ class customize_image:
                     math.floor(bg_color[2] + r if bg_color[2] + r <= 255 else 255))
         return text_color
 
-    def get_char_color(self,bg_color: tuple[int, int, int]) -> tuple[int, int, int]:
+    def get_char_color(self,bg_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         r = 140
         if max(*bg_color) > 255 - r:
             r *= -1
@@ -101,7 +101,7 @@ class customize_image:
                     math.floor(bg_color[2] + 5 if bg_color[2] + r <= 255 else 255))
         return char_color
     
-    def get_char_high_color(self,bg_color: tuple[int, int, int]) -> tuple[int, int, int]:
+    def get_char_high_color(self,bg_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         r = 140
         d = 20
         if max(*bg_color) > 255 - r:
@@ -111,7 +111,7 @@ class customize_image:
                     math.floor(bg_color[2] + d if bg_color[2] + r <= 255 else 255))
         return char_color
     
-    def get_bg_detail_color(self,bg_color: tuple[int, int, int]) -> tuple[int, int, int]:
+    def get_bg_detail_color(self,bg_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         r = 140
         if max(*bg_color) > 255 - r:
             r *= -1
@@ -120,7 +120,7 @@ class customize_image:
                     math.floor(bg_color[2] - 20 if bg_color[2] + r <= 255 else 255))
         return bg_detail_color
 
-    def get_highlight_color(self,color: tuple[int, int, int]) -> tuple[int, int, int]:
+    def get_highlight_color(self,color: Tuple[int, int, int]) -> Tuple[int, int, int]:
         red_color = color[0]
         green_color = color[1]
         blue_color = color[2]
@@ -1141,9 +1141,9 @@ async def draw_pic(uid: str, nickname: str, image: Optional[str] = None, mode: i
     if char_num > 8:
         tasks = []
         for index,i in enumerate(char_datas):
-            async def draw_char_pic(img: Image, char_data: json, index: int, bg_color :tuple[int, int, int],
-                                    text_color: tuple[int, int, int], bg_detail_color: tuple[int, int, int],
-                                    char_high_color: tuple[int, int, int]):
+            async def draw_char_pic(img: Image, char_data: json, index: int, bg_color :Tuple[int, int, int],
+                                    text_color: Tuple[int, int, int], bg_detail_color: Tuple[int, int, int],
+                                    char_high_color: Tuple[int, int, int]):
                 char_mingzuo = 0
                 for k in char_data['constellations']:
                     if k['is_actived']:
