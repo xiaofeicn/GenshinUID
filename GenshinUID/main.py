@@ -57,7 +57,7 @@ add_cookie = on_startswith("添加", permission=PRIVATE_FRIEND, priority=priorit
 search = on_command("查询", permission=GROUP, priority=priority)
 get_sign = on_command("签到", priority=priority)
 get_mihoyo_coin = on_command("开始获取米游币", priority=priority)
-check = on_command("校验全部Cookies", priority=priority)
+check = on_command("校验全部Cookies", permission=SUPERUSER, priority=priority)
 
 all_genshinsign_recheck = on_command("全部重签", permission=SUPERUSER, priority=priority)
 all_bbscoin_recheck = on_command("全部重获取", permission=SUPERUSER, priority=priority)
@@ -93,6 +93,8 @@ async def use_chat_func(bot: Bot, event: MessageEvent):
 async def use_book_func(bot: Bot, event: MessageEvent):
     im = "绑定mys+通行证ID  👉  绑定通行证\n" \
          "绑定uid+uid 👉  绑定UID\n" \
+         "查询 👉  查询账号数据\n" \
+         "活动列表 👉  当前活动\n" \
          "原魔公子 👉  原魔数据\n" \
          "#uid+uid 👉  查询此uid数据\n" \
          "#mys+通行证ID 👉  查询此通行证数据\n" \
@@ -100,6 +102,11 @@ async def use_book_func(bot: Bot, event: MessageEvent):
          "签到 👉  米游社签到【需绑定自己的cookie】\n" \
          "每月统计 👉  当月原石摩拉收入【需绑定自己的cookie】\n" \
          "当前状态 👉  当前任务|树脂|派遣【需绑定自己的cookie】\n" \
+         "角色+角色名称 👉  角色信息\n" \
+         "武器+角色名称 👉  武器信息\n" \
+         "材料+角色名称 👉  材料信息\n" \
+         "角色+(用什么|能用啥|怎么养) 👉  角色武器材料圣遗物\n" \
+         "(材料名|圣遗物名|武器名)+(能给谁|给谁用|要给谁|谁能用) 👉  给谁用\n" \
          "查看其他功能请发送 help\n"
     try:
         await use_book.send(im)
