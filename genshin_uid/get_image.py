@@ -4,7 +4,7 @@ import threading
 from base64 import b64encode
 from io import BytesIO
 from re import Match, findall
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -980,7 +980,7 @@ async def draw_abyss_pic(uid: str, nickname: str, floor_num: int, image: Optiona
     return resultmes
 
 
-async def get_all_calculate_info(client: ClientSession, uid: str, char_id: list[str], ck: str, name: list):
+async def get_all_calculate_info(client: ClientSession, uid: str, char_id: List[str], ck: str, name: list):
     tasks = []
     for id_, name_ in zip(char_id, name):
         tasks.append(get_calculate_info(client, uid, id_, ck, name_))
