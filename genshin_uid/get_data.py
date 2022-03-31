@@ -7,6 +7,7 @@ import re
 import sqlite3
 import string
 import time
+from aiohttp import ClientSession
 from shutil import copyfile
 
 import requests
