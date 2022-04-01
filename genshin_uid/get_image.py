@@ -1170,7 +1170,7 @@ async def draw_pic(uid: str, nickname: str, image: Optional[Match] = None, mode:
     text_draw.text((245, 477), str(raw_data['stats']['precious_chest_number']), text_color, genshin_font(24))
     text_draw.text((245, 528), str(raw_data['stats']['luxurious_chest_number']), text_color, genshin_font(24))
 
-    mondstadt = liyue = dragonspine = inazuma = offering = dict()
+    mondstadt = liyue = dragonspine = inazuma = offering = chasms_maw = under_chasms_maw =  dict()
     for i in raw_data['world_explorations']:
         if i["name"] == "蒙德":
             mondstadt = i
@@ -1183,16 +1183,16 @@ async def draw_pic(uid: str, nickname: str, image: Optional[Match] = None, mode:
         elif i["name"] == "渊下宫":
             offering = i
         elif i["name"] == "璃月层岩巨渊":
-            ChasmsMaw = i
+            chasms_maw = i
         elif i["name"] == "璃月层岩巨渊·地下矿区":
-            UnderChasmsMaw = i
+            under_chasms_maw = i
 
     # 层岩巨渊
-    text_draw.text((477, 727), str(ChasmsMaw['exploration_percentage'] / 10) + '%', text_color,
+    text_draw.text((477, 727), str(chasms_maw['exploration_percentage'] / 10) + '%', text_color,
                    genshin_font(22))
-    text_draw.text((523, 753), str(UnderChasmsMaw['exploration_percentage'] / 10) + '%', text_color,
+    text_draw.text((523, 753), str(under_chasms_maw['exploration_percentage'] / 10) + '%', text_color,
                    genshin_font(22))
-    text_draw.text((500, 782), 'lv.' + str(UnderChasmsMaw['offerings'][0]['level']), text_color, genshin_font(22))
+    text_draw.text((500, 782), 'lv.' + str(under_chasms_maw['offerings'][0]['level']), text_color, genshin_font(22))
 
     # 蒙德
     text_draw.text((235, 600), str(mondstadt['exploration_percentage'] / 10) + '%', text_color,
@@ -1499,7 +1499,7 @@ async def draw_info_pic(uid: str, image: Optional[Match] = None) -> str:
 
     # 获取背景图片各项参数
     based_w = 900
-    based_h = 1380
+    based_h = 1480
     image_def = CustomizeImage(image, based_w, based_h)
     bg_img = image_def.bg_img
     bg_color = image_def.bg_color
@@ -1533,10 +1533,10 @@ async def draw_info_pic(uid: str, image: Optional[Match] = None) -> str:
     bg_img.paste(avatar_bg_color, (113, 98), avatar_bg)
     bg_img.paste(avatar_fg, (114, 95), avatar_fg)
 
-    info1_color = Image.new("RGBA", (900, 1300), bg_color)
+    info1_color = Image.new("RGBA", (900, 1400), bg_color)
     bg_img.paste(info1_color, (0, 0), info1)
 
-    info2_color = Image.new("RGBA", (900, 1300), text_color)
+    info2_color = Image.new("RGBA", (900, 1400), text_color)
     bg_img.paste(info2_color, (0, 0), info2)
 
     bg_img.paste(info3, (0, 0), info3)
@@ -1569,8 +1569,10 @@ async def draw_info_pic(uid: str, image: Optional[Match] = None) -> str:
                    anchor="lm")
 
     # 收入比例
-    for index, i in enumerate(award_data['data']['month_data']['group_by']):
-        text_draw.text((681, 445 + index * 32), f"{str(i['num'])}({str(i['percent'])}%)", text_color, genshin_font(21),
+    group_by = award_data['data']['month_data']['group_by']
+    group_by.sort(key=lambda x: (-x['action_id']))
+    for index, i in enumerate(group_by):
+        text_draw.text((681, 447 + index * 42), f"{str(i['num'])}({str(i['percent'])}%)", text_color, genshin_font(21),
                        anchor="lm")
 
     # 基本四项
@@ -1585,19 +1587,29 @@ async def draw_info_pic(uid: str, image: Optional[Match] = None) -> str:
                    f"{daily_data['resin_discount_num_limit']}",
                    text_color, genshin_font(26), anchor="lm")
 
+    # 参量质变仪
+    if daily_data['transformer']['recovery_time']['reached']:
+        transformer_status = "已处于可用状态"
+        text_draw.text((170, 707), f"{transformer_status}", highlight_color, genshin_font(18), anchor="lm")
+    else:
+        transformer_time = daily_data['transformer']['recovery_time']
+        transformer_status = "还剩{}天{}小时{}分钟可用".format(transformer_time['Day'], transformer_time['Hour'], 
+                                                                transformer_time['Minute'])
+        text_draw.text((170, 707), f"{transformer_status}", text_color, genshin_font(18), anchor="lm")
+
     # 树脂恢复时间计算
     if int(daily_data['resin_recovery_time']) <= 0:
         text_draw.text((170, 331), f"已全部恢复", text_color, genshin_font(18), anchor="lm")
     else:
         resin_recovery_time = seconds2hours(
             daily_data['resin_recovery_time'])
-    next_resin_rec_time = seconds2hours(
-        8 * 60 - ((daily_data['max_resin'] - daily_data['current_resin']) * 8 * 60 - int(
-            daily_data['resin_recovery_time'])))
-    text_draw.text((268, 305), f" {next_resin_rec_time}", text_color, genshin_font(18), anchor="lm")
+        next_resin_rec_time = seconds2hours(
+            8 * 60 - ((daily_data['max_resin'] - daily_data['current_resin']) * 8 * 60 - int(
+                daily_data['resin_recovery_time'])))
+        text_draw.text((268, 305), f" {next_resin_rec_time}", text_color, genshin_font(18), anchor="lm")
 
-    text_draw.text((170, 331), f"预计                后全部恢复", text_color, genshin_font(18), anchor="lm")
-    text_draw.text((208, 331), f"{resin_recovery_time}", highlight_color, genshin_font(18), anchor="lm")
+        text_draw.text((170, 331), f"预计                后全部恢复", text_color, genshin_font(18), anchor="lm")
+        text_draw.text((208, 331), f"{resin_recovery_time}", highlight_color, genshin_font(18), anchor="lm")
 
     # 洞天宝钱时间计算
     coin_rec_time = seconds2hours(int(daily_data["home_coin_recovery_time"]))
@@ -1663,10 +1675,10 @@ async def draw_info_pic(uid: str, image: Optional[Match] = None) -> str:
             remained_timed: str = seconds2hours(i['remained_time'])
             charpic_draw.text((200, 65), f"剩余时间 {remained_timed}", text_color, genshin_font(24), anchor="lm")
 
-        bg_img.paste(charpic, (-15, 748 + 115 * index), charpic)
+        bg_img.paste(charpic, (-15, 848 + 115 * index), charpic)
 
     end_pic = Image.open(os.path.join(TEXT_PATH, "abyss_3.png"))
-    bg_img.paste(end_pic, (0, 1340), end_pic)
+    bg_img.paste(end_pic, (0, 1440), end_pic)
 
     bg_img = bg_img.convert('RGB')
     result_buffer = BytesIO()
@@ -1695,8 +1707,16 @@ async def draw_event_pic() -> None:
                         k["time_data"] = time_data
                     elif value.text == "〓活动时间〓":
                         time_data = content_bs.find_all("p")[index + 1].text
-                        time_data = time_data.replace("</t>", "")[16:]
-                        k["time_data"] = time_data
+                        if "<t class=" in time_data:
+                            time_datas = []
+                            for s in time_data.split(" ~ "):
+                                if "<t class=" in s:
+                                    time_datas.append(findall("<[a-zA-Z]+.*?>([\s\S]*?)</[a-zA-Z]*?>", s)[0])
+                                else:
+                                    time_datas.append(s)
+                            k["time_data"] = "——".join(time_datas)
+                        else:
+                            k["time_data"] = time_data
                     elif value.text == "〓祈愿介绍〓":
                         start_time = content_bs.find_all("tr")[1].td.find_all("p")[0].text
                         if "<t class=" in start_time:
@@ -1705,7 +1725,7 @@ async def draw_event_pic() -> None:
                                            content_bs.find_all("tr")[1].td.find_all("p")[2].text)[0]
                         if "<t class=" in end_time:
                             end_time = findall("<[a-zA-Z]+.*?>([\s\S]*?)</[a-zA-Z]*?>", end_time)[0]
-                        time_data = start_time + "~" + end_time
+                        time_data = start_time + "——" + end_time
                         k["time_data"] = time_data
 
         if "冒险助力礼包" in k["title"] or "纪行" in k["title"]:
