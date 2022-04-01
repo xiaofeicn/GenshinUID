@@ -36,8 +36,8 @@ get_mys_info = on_startswith("#mys", priority=priority)
 get_event = on_command("活动列表", priority=priority)
 get_lots = on_command("御神签", priority=priority)
 
-open_switch = on_command("gs开启", priority=priority)
-close_switch = on_command("gs关闭", priority=priority)
+open_switch = on_startswith("gs开启", priority=priority)
+close_switch = on_startswith("gs关闭", priority=priority)
 
 link_mys = on_startswith("绑定mys", priority=priority)
 link_uid = on_startswith("绑定uid", priority=priority)
