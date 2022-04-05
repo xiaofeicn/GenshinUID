@@ -195,7 +195,7 @@ async def daily_mihoyo_bbs_sign():
 @get_help.handle()
 async def send_help_pic(bot: Bot, event: MessageEvent):
     try:
-        help_path = os.path.join(INDEX_PATH,"help.png")
+        help_path = os.path.join(INDEX_PATH,'help.png')
         f = open(help_path, 'rb')
         ls_f = b64encode(f.read()).decode()
         img_mes = 'base64://' + ls_f
