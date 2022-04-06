@@ -35,7 +35,7 @@ get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command('help', priority=priority)
+get_help = on_command(('help','gs帮助'), priority=priority)
 
 open_switch = on_startswith('gs开启', priority=priority)
 close_switch = on_startswith('gs关闭', priority=priority)
@@ -50,7 +50,7 @@ get_genshin_info = on_command('当前信息', priority=priority)
 
 add_cookie = on_startswith('添加', permission=PRIVATE_FRIEND, priority=priority)
 
-search = on_command("查询", permission=GROUP, priority=priority)
+search = on_command("查询", priority=priority)
 get_sign = on_command("签到", priority=priority)
 get_mihoyo_coin = on_command("开始获取米游币", priority=priority)
 check = on_command("校验全部Cookies", priority=priority)
