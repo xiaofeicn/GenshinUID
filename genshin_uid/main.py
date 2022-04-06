@@ -35,7 +35,7 @@ get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command(Tuple('help','gs帮助'), priority=priority)
+get_help = on_command(tuple['help','gs帮助'], priority=priority)
 
 open_switch = on_startswith('gs开启', priority=priority)
 close_switch = on_startswith('gs关闭', priority=priority)
