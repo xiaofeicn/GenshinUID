@@ -35,7 +35,7 @@ get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command('gs帮助', priority=priority)
+get_help = on_command('help', priority=priority)
 
 open_switch = on_startswith('gs开启', priority=priority)
 close_switch = on_startswith('gs关闭', priority=priority)
@@ -63,7 +63,7 @@ get_weapon_adv = on_regex('[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能
 
 get_guide_pic = on_regex('[\u4e00-\u9fa5]+(推荐|攻略)', priority=priority)
 
-use_book = on_command("help", priority=priority)
+use_book = on_command("fqhelp", priority=priority)
 chat = on_message(priority=10)
 FILE_PATH = os.path.join(os.path.join(os.path.dirname(__file__), 'mihoyo_libs'), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
