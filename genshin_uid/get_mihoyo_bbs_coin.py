@@ -5,7 +5,7 @@ import time
 from httpx import AsyncClient
 from nonebot import logger
 
-from get_data import old_version_get_ds_token, random_hex
+from .get_data import old_version_get_ds_token, random_hex
 
 # 米游社的API列表
 bbs_Cookieurl = "https://webapi.account.mihoyo.com/Api/cookie_accountinfo_by_loginticket?login_ticket={}"
