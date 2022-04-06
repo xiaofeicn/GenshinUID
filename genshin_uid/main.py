@@ -35,7 +35,8 @@ get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command(Tuple['help','gs帮助'], priority=priority)
+get_help = on_command('help', priority=priority)
+get_help_cn = on_command('gs帮助', priority=priority)
 
 open_switch = on_startswith('gs开启', priority=priority)
 close_switch = on_startswith('gs关闭', priority=priority)
@@ -247,6 +248,17 @@ async def send_help_pic(bot: Bot, event: MessageEvent):
         img_mes = 'base64://' + ls_f
         f.close()
         await get_help.send(MessageSegment.image(img_mes))
+    except Exception:
+        logger.exception('获取帮助失败。')
+@get_help_cn.handle()
+async def send_help_pic_cn(bot: Bot, event: MessageEvent):
+    try:
+        help_path = os.path.join(INDEX_PATH,'help.png')
+        f = open(help_path, 'rb')
+        ls_f = b64encode(f.read()).decode()
+        img_mes = 'base64://' + ls_f
+        f.close()
+        await send_help_pic_cn.send(MessageSegment.image(img_mes))
     except Exception:
         logger.exception('获取帮助失败。')
 
