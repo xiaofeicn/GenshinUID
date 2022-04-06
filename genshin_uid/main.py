@@ -35,7 +35,7 @@ get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command(('help','gs帮助'), priority=priority)
+get_help = on_command(Tuple('help','gs帮助'), priority=priority)
 
 open_switch = on_startswith('gs开启', priority=priority)
 close_switch = on_startswith('gs关闭', priority=priority)
@@ -764,7 +764,7 @@ async def send_daily_data(bot: Bot, event: MessageEvent):
         uid = uid[0]
         mes = await daily('ask', uid)
         im = mes[0]['message']
-        await daily_data.send(im, at_sender=True)
+        await daily_data.send(im, at_sender=False)
     except TypeError:
         im = '没有找到绑定信息。'
         await daily_data.send(im, at_sender=True)
@@ -791,13 +791,13 @@ async def send_uid_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r'\d+', message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image)
                     if im.startswith('base64://'):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_uid_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image)
                     if im.startswith('base64://'):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_uid_info.send(im, at_sender=False)
             except ActionFailed as e:
@@ -815,13 +815,13 @@ async def send_uid_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r'\d+', message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 2, '2')
                     if im.startswith('base64://'):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_uid_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 2, '2')
                     if im.startswith('base64://'):
-                        await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_uid_info.send(im, at_sender=False)
             except TypeError:
@@ -834,7 +834,7 @@ async def send_uid_info(bot: Bot, event: MessageEvent):
             try:
                 im = await draw_pic(uid, event.sender.nickname, image, 2)
                 if im.startswith('base64://'):
-                    await get_uid_info.send(MessageSegment.image(im), at_sender=True)
+                    await get_uid_info.send(MessageSegment.image(im), at_sender=False)
                 else:
                     await get_uid_info.send(im, at_sender=False)
             except ActionFailed as e:
@@ -911,13 +911,13 @@ async def get_info(bot: Bot, event: MessageEvent):
                         floor_num = re.findall(r'\d+', message)[0]
                         im = await draw_abyss_pic(uid[0], nickname, floor_num, image, uid[1])
                         if im.startswith('base64://'):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
                             await search.send(im, at_sender=False)
                     else:
                         im = await draw_abyss0_pic(uid[0], nickname, image, uid[1])
                         if im.startswith('base64://'):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
                             await search.send(im, at_sender=False)
                 except ActionFailed as e:
@@ -935,13 +935,13 @@ async def get_info(bot: Bot, event: MessageEvent):
                         floor_num = re.findall(r'\d+', message)[0]
                         im = await draw_abyss_pic(uid[0], nickname, floor_num, image, uid[1], '2')
                         if im.startswith('base64://'):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
                             await search.send(im, at_sender=False)
                     else:
                         im = await draw_abyss0_pic(uid[0], nickname, image, uid[1], '2')
                         if im.startswith('base64://'):
-                            await search.send(MessageSegment.image(im), at_sender=True)
+                            await search.send(MessageSegment.image(im), at_sender=False)
                         else:
                             await search.send(im, at_sender=False)
                 except ActionFailed as e:
@@ -957,7 +957,7 @@ async def get_info(bot: Bot, event: MessageEvent):
                 try:
                     im = await draw_word_cloud(uid[0], image, uid[1])
                     if im.startswith('base64://'):
-                        await search.send(MessageSegment.image(im), at_sender=True)
+                        await search.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await search.send(im, at_sender=False)
                 except ActionFailed as e:
@@ -973,7 +973,7 @@ async def get_info(bot: Bot, event: MessageEvent):
                 try:
                     im = await draw_pic(uid[0], nickname, image, uid[1])
                     if im.startswith('base64://'):
-                        await search.send(MessageSegment.image(im), at_sender=True)
+                        await search.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await search.send(im, at_sender=False)
                 except ActionFailed as e:
@@ -1009,13 +1009,13 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r'\d+', message)[1]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 3)
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_mys_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 3)
                     if im.startswith("base64://"):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
@@ -1033,13 +1033,13 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
                     floor_num = re.findall(r'\d+', message)[0]
                     im = await draw_abyss_pic(uid, event.sender.nickname, floor_num, image, 3, '2')
                     if im.startswith('base64://'):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_mys_info.send(im, at_sender=False)
                 else:
                     im = await draw_abyss0_pic(uid, event.sender.nickname, image, 3, '2')
                     if im.startswith('base64://'):
-                        await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                        await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                     else:
                         await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
@@ -1055,7 +1055,7 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
             try:
                 im = await draw_pic(uid, event.sender.nickname, image, 3)
                 if im.startswith('base64://'):
-                    await get_mys_info.send(MessageSegment.image(im), at_sender=True)
+                    await get_mys_info.send(MessageSegment.image(im), at_sender=False)
                 else:
                     await get_mys_info.send(im, at_sender=False)
             except ActionFailed as e:
