@@ -1029,7 +1029,7 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
 @all_genshinsign_recheck.handle()
 async def genshin_resign(bot: Bot):
     await all_genshinsign_recheck.send('已开始执行')
-    await sign_at_night()
+    await daily_sign()
 
 
 @all_bbscoin_recheck.handle()
