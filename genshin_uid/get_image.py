@@ -1186,7 +1186,7 @@ async def draw_pic(uid: str, nickname: str, image: Optional[Match] = None, mode:
             chasms_maw = i
         elif i['name'] == '璃月层岩巨渊·地下矿区':
             under_chasms_maw = i
-    logger.exception(chasms_maw)
+    logger.exception(raw_data['world_explorations'])
     logger.exception(inazuma)
     # 层岩巨渊
     # text_draw.text((477, 727), str(chasms_maw['exploration_percentage'] / 10) + '%', text_color,
