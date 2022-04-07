@@ -1182,18 +1182,16 @@ async def draw_pic(uid: str, nickname: str, image: Optional[Match] = None, mode:
             inazuma = i
         elif i['name'] == '渊下宫':
             offering = i
-        elif i['name'] == '璃月层岩巨渊':
+        elif i['name'] == '层岩巨渊':
             chasms_maw = i
-        elif i['name'] == '璃月层岩巨渊·地下矿区':
+        elif i['name'] == '层岩巨渊·地下矿区':
             under_chasms_maw = i
-    logger.exception(raw_data['world_explorations'])
-    logger.exception(inazuma)
-    # 层岩巨渊
-    # text_draw.text((477, 727), str(chasms_maw['exploration_percentage'] / 10) + '%', text_color,
-    #                genshin_font(22))
-    # text_draw.text((523, 753), str(under_chasms_maw['exploration_percentage'] / 10) + '%', text_color,
-    #                genshin_font(22))
-    # text_draw.text((500, 782), 'lv.' + str(under_chasms_maw['offerings'][0]['level']), text_color, genshin_font(22))
+    #层岩巨渊
+    text_draw.text((477, 727), str(chasms_maw['exploration_percentage'] / 10) + '%', text_color,
+                   genshin_font(22))
+    text_draw.text((523, 753), str(under_chasms_maw['exploration_percentage'] / 10) + '%', text_color,
+                   genshin_font(22))
+    text_draw.text((500, 782), 'lv.' + str(under_chasms_maw['offerings'][0]['level']), text_color, genshin_font(22))
 
     # 蒙德
     text_draw.text((235, 600), str(mondstadt['exploration_percentage'] / 10) + '%', text_color,
