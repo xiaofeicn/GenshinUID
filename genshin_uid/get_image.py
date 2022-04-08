@@ -835,7 +835,7 @@ async def draw_abyss_pic(uid: str, nickname: str, floor_num: int, image: Optiona
     raw_data = data_def.raw_abyss_data
     uid = data_def.uid
     nickname = data_def.nickname if data_def.nickname else nickname
-    logger.exception(raw_data)
+    logger.error(raw_data)
     # 获取数据
     raw_data = raw_data['data']
     raw_char_data = raw_char_data['data']['avatars']
@@ -917,7 +917,7 @@ async def draw_abyss_pic(uid: str, nickname: str, floor_num: int, image: Optiona
             abyss2.paste(char_img, char_crop, char_img)
             num_1 = num_1 + 1
         num_2 = 0
-        logger.exception(based_data['levels'][j]['battles'][1]['avatars'])
+        logger.error(based_data['levels'][j]['battles'][1]['avatars'])
         for i in based_data['levels'][j]['battles'][1]['avatars']:
             if not os.path.exists(os.path.join(CHAR_DONE_PATH, str(i['id']) + '.png')):
                 get_char_done_pic(i['id'], i['icon'], i['rarity'])
