@@ -247,7 +247,6 @@ async def send_help_pic(bot: Bot, event: MessageEvent):
         img_mes = 'base64://' + ls_f
         f.close()
         await get_help.send(MessageSegment.image(img_mes))
-        await get_help.send("查询Cookie或Stoken 请查看空间动态[教程为PC端操作]")
     except Exception:
         logger.exception('获取帮助失败。')
 
