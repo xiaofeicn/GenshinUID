@@ -835,7 +835,7 @@ async def draw_abyss_pic(uid: str, nickname: str, floor_num: int, image: Optiona
     raw_data = data_def.raw_abyss_data
     uid = data_def.uid
     nickname = data_def.nickname if data_def.nickname else nickname
-
+    logger.exception(raw_data)
     # 获取数据
     raw_data = raw_data['data']
     raw_char_data = raw_char_data['data']['avatars']
