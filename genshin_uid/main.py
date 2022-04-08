@@ -30,8 +30,8 @@ get_audio = on_startswith('语音', priority=priority)
 get_artifacts = on_startswith('圣遗物', priority=priority)
 get_food = on_startswith('食物', priority=priority)
 
-get_uid_info = on_startswith("uid", permission=GROUP, priority=priority)
-get_mys_info = on_startswith("mys", permission=GROUP, priority=priority)
+get_uid_info = on_startswith("uid", priority=priority)
+get_mys_info = on_startswith("mys", priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
 get_lots = on_command('御神签', priority=priority)
