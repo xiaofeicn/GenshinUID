@@ -32,22 +32,23 @@ get_genshin_info = on_command("当前信息", priority=priority)
 
 @get_sign.handle()
 async def get_sing_func(bot: Bot, event: MessageEvent):
+    im = None
     try:
         qid = int(event.sender.user_id)
-        uid = await select_db(qid, mode="uid")
+        uid = await select_db(qid, mode='uid')
         uid = uid[0]
         im = await sign(uid)
     except TypeError:
-        im = "没有找到绑定信息。"
+        im = '没有找到绑定信息。'
     except Exception as e:
-        im = "发生错误 {},请检查后台输出。".format(e)
-        logger.exception("签到失败")
+        im = '发生错误 {},请检查后台输出。'.format(e)
+        logger.exception('签到失败')
     finally:
         try:
             await get_sign.send(im, at_sender=True)
         except ActionFailed as e:
-            await get_sign.send("机器人发送消息失败：{}".format(e.info['wording']))
-            logger.exception("发送签到信息失败")
+            await get_sign.send('机器人发送消息失败：{}'.format(e.info['wording']))
+            logger.exception('发送签到信息失败')
 
 
 """
@@ -59,16 +60,16 @@ async def get_sing_func(bot: Bot, event: MessageEvent):
 async def send_monthly_data(bot: Bot, event: MessageEvent):
     try:
         qid = int(event.sender.user_id)
-        uid = await select_db(qid, mode="uid")
+        uid = await select_db(qid, mode='uid')
         uid = uid[0]
         im = await award(uid)
         await monthly_data.send(im, at_sender=True)
     except ActionFailed as e:
-        await monthly_data.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送每月统计信息失败")
+        await monthly_data.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送每月统计信息失败')
     except Exception:
         await monthly_data.send('未找到绑定信息', at_sender=True)
-        logger.exception("获取/发送每月统计失败")
+        logger.exception('获取/发送每月统计失败')
 
 
 """
@@ -79,41 +80,45 @@ async def send_monthly_data(bot: Bot, event: MessageEvent):
 @daily_data.handle()
 async def send_daily_data(bot: Bot, event: MessageEvent):
     try:
-        uid = await select_db(int(event.sender.user_id), mode="uid")
+        uid = await select_db(int(event.sender.user_id), mode='uid')
         uid = uid[0]
-        mes = await daily("ask", uid)
+        mes = await daily('ask', uid)
         im = mes[0]['message']
-        await daily_data.send(im, at_sender=True)
+        await daily_data.send(im, at_sender=False)
     except TypeError:
-        im = "没有找到绑定信息。"
+        im = '没有找到绑定信息。'
         await daily_data.send(im, at_sender=True)
     except ActionFailed as e:
-        await daily_data.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送当前状态信息失败")
+        await daily_data.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送当前状态信息失败')
     except Exception as e:
-        await daily_data.send("发生错误 {},请检查后台输出。".format(e))
-        logger.exception("查询当前状态错误")
+        await daily_data.send('发生错误 {},请检查后台输出。'.format(e))
+        logger.exception('查询当前状态错误')
+
 
 """
 查询当前树脂状态以及派遣状态 功能 图片版
 """
+
+
 @get_genshin_info.handle()
 async def send_genshin_info(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
-            ' ', "")
+            ' ', '')
         qid = int(event.sender.user_id)
-        uid = await select_db(qid, mode="uid")
-        image = re.search(r"\[CQ:image,file=(.*),url=(.*)]", message)
+        uid = await select_db(qid, mode='uid')
+        image = re.search(r'\[CQ:image,file=(.*),url=(.*)]', message)
         uid = uid[0]
-        im = await draw_info_pic(uid,image)
-        await get_genshin_info.send(MessageSegment.image(im), at_sender=False)
+        im = await draw_info_pic(uid, image)
+        await get_genshin_info.send(MessageSegment.image(im), at_sender=True)
     except ActionFailed as e:
-        await get_genshin_info.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送每月统计信息失败")
+        await get_genshin_info.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送每月统计信息失败')
     except Exception:
         await get_genshin_info.send('未找到绑定信息', at_sender=True)
-        logger.exception("获取/发送每月统计失败")
+        logger.exception('获取/发送每月统计失败')
+
 
 """
 开启 自动签到 和 推送树脂提醒 功能
@@ -124,63 +129,79 @@ async def send_genshin_info(bot: Bot, event: MessageEvent):
 async def open_switch_func(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
-            ' ', "").replace('开启', "")
+            ' ', '').replace('开启', '')
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
 
         qid = int(event.sender.user_id)
-        at = re.search(r"\[CQ:at,qq=(\d*)]", message)
+        at = re.search(r'\[CQ:at,qq=(\d*)]', message)
 
-        if m == "自动签到":
+        if m == '自动签到':
             try:
                 if at and qid in superusers:
                     qid = at.group(1)
                 elif at and at.group(1) != qid:
-                    await close_switch.send("你没有权限。", at_sender=True)
+                    await open_switch.send('你没有权限。', at_sender=True)
                     return
                 else:
                     pass
-                gid = event.get_session_id().split("_")[1] if len(
-                    event.get_session_id().split("_")) == 3 else "on"
-                uid = await select_db(qid, mode="uid")
-                im = await open_push(int(uid[0]), qid, str(gid), "StatusB")
+                gid = event.get_session_id().split('_')[1] if len(
+                    event.get_session_id().split('_')) == 3 else 'on'
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, str(gid), 'StatusB')
                 await open_switch.send(im, at_sender=True)
             except Exception:
-                await open_switch.send("未绑定uid信息！", at_sender=True)
-        elif m == "推送":
+                await open_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '推送':
             try:
                 if at and qid in superusers:
                     qid = at.group(1)
                 elif at and at.group(1) != qid:
-                    await close_switch.send("你没有权限。", at_sender=True)
+                    await open_switch.send('你没有权限。', at_sender=True)
                     return
                 else:
                     pass
-                gid = event.get_session_id().split("_")[1] if len(
-                    event.get_session_id().split("_")) == 3 else "on"
-                uid = await select_db(qid, mode="uid")
-                im = await open_push(int(uid[0]), qid, str(gid), "StatusA")
+                gid = event.get_session_id().split('_')[1] if len(
+                    event.get_session_id().split('_')) == 3 else 'on'
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, str(gid), 'StatusA')
                 await open_switch.send(im, at_sender=True)
             except Exception:
-                await open_switch.send("未绑定uid信息！", at_sender=True)
-        elif m == "简洁签到报告":
+                await open_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '自动米游币':
+            try:
+                if at and qid in superusers:
+                    qid = at.group(1)
+                elif at and at.group(1) != qid:
+                    await close_switch.send('你没有权限。', at_sender=True)
+                    return
+                else:
+                    pass
+                gid = event.get_session_id().split('_')[1] if len(
+                    event.get_session_id().split('_')) == 3 else 'on'
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, str(gid), 'StatusC')
+                await open_switch.send(im, at_sender=True)
+            except Exception:
+                await open_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '简洁签到报告':
             try:
                 if qid in superusers:
-                    _ = await config_check("SignReportSimple", "OPEN")
-                    await open_switch.send("成功!", at_sender=True)
+                    _ = await config_check('SignReportSimple', 'OPEN')
+                    await open_switch.send('成功!', at_sender=True)
                 else:
                     return
             except ActionFailed as e:
-                await open_switch.send("机器人发送消息失败：{}".format(e.info['wording']))
-                logger.exception("发送设置成功信息失败")
+                await open_switch.send('机器人发送消息失败：{}'.format(e.info['wording']))
+                logger.exception('发送设置成功信息失败')
             except Exception as e:
-                await open_switch.send("发生错误 {},请检查后台输出。".format(e))
-                logger.exception("设置简洁签到报告失败")
+                await open_switch.send('发生错误 {},请检查后台输出。'.format(e))
+                logger.exception('设置简洁签到报告失败')
     except ActionFailed as e:
-        await open_switch.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送开启自动签到信息失败")
+        await open_switch.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送开启自动签到信息失败')
     except Exception as e:
-        await open_switch.send("发生错误 {},请检查后台输出。".format(e))
-        logger.exception("开启自动签到失败")
+        await open_switch.send('发生错误 {},请检查后台输出。'.format(e))
+        logger.exception('开启自动签到失败')
 
 
 """
@@ -192,59 +213,73 @@ async def open_switch_func(bot: Bot, event: MessageEvent):
 async def close_switch_func(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(
-            ' ', "").replace('关闭', "")
+            ' ', '').replace('关闭', '')
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
 
         qid = int(event.sender.user_id)
-        at = re.search(r"\[CQ:at,qq=(\d*)]", message)
+        at = re.search(r'\[CQ:at,qq=(\d*)]', message)
 
-        if m == "自动签到":
+        if m == '自动签到':
             try:
                 if at and qid in superusers:
                     qid = at.group(1)
                 elif at and at.group(1) != qid:
-                    await close_switch.send("你没有权限。", at_sender=True)
+                    await close_switch.send('你没有权限。', at_sender=True)
                     return
                 else:
                     pass
-                uid = await select_db(qid, mode="uid")
-                im = await open_push(int(uid[0]), qid, "off", "StatusB")
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, 'off', 'StatusB')
                 await close_switch.send(im, at_sender=True)
             except Exception:
-                await close_switch.send("未绑定uid信息！", at_sender=True)
-        elif m == "推送":
+                await close_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '推送':
             try:
                 if at and qid in superusers:
                     qid = at.group(1)
                 elif at and at.group(1) != qid:
-                    await close_switch.send("你没有权限。", at_sender=True)
+                    await close_switch.send('你没有权限。', at_sender=True)
                     return
                 else:
                     pass
-                uid = await select_db(qid, mode="uid")
-                im = await open_push(int(uid[0]), qid, "off", "StatusA")
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, 'off', 'StatusA')
                 await close_switch.send(im, at_sender=True)
             except Exception:
-                await close_switch.send("未绑定uid信息！", at_sender=True)
-        elif m == "简洁签到报告":
+                await close_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '自动米游币':
+            try:
+                if at and qid in superusers:
+                    qid = at.group(1)
+                elif at and at.group(1) != qid:
+                    await close_switch.send('你没有权限。', at_sender=True)
+                    return
+                else:
+                    pass
+                uid = await select_db(qid, mode='uid')
+                im = await open_push(int(uid[0]), qid, 'off', 'StatusC')
+                await close_switch.send(im, at_sender=True)
+            except Exception:
+                await close_switch.send('未绑定uid信息！', at_sender=True)
+        elif m == '简洁签到报告':
             try:
                 if qid in superusers:
-                    _ = await config_check("SignReportSimple", "CLOSED")
-                    await close_switch.send("成功!", at_sender=True)
+                    _ = await config_check('SignReportSimple', 'CLOSED')
+                    await close_switch.send('成功!', at_sender=True)
                 else:
                     return
             except ActionFailed as e:
-                await close_switch.send("机器人发送消息失败：{}".format(e.info['wording']))
-                logger.exception("发送设置成功信息失败")
+                await close_switch.send('机器人发送消息失败：{}'.format(e.info['wording']))
+                logger.exception('发送设置成功信息失败')
             except Exception as e:
-                await open_switch.send("发生错误 {},请检查后台输出。".format(e))
-                logger.exception("设置简洁签到报告失败")
+                await close_switch.send('发生错误 {},请检查后台输出。'.format(e))
+                logger.exception('设置简洁签到报告失败')
     except ActionFailed as e:
-        await close_switch.send("机器人发送消息失败：{}".format(e.info['wording']))
-        logger.exception("发送开启自动签到信息失败")
+        await close_switch.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送开启自动签到信息失败')
     except Exception as e:
-        await close_switch.send("发生错误 {},请检查后台输出。".format(e))
-        logger.exception("关闭自动签到失败")
+        await close_switch.send('发生错误 {},请检查后台输出。'.format(e))
+        logger.exception('关闭自动签到失败')
 
 
 """
@@ -255,11 +290,39 @@ async def close_switch_func(bot: Bot, event: MessageEvent):
 @all_genshinsign_recheck.handle()
 async def genshin_resign(bot: Bot):
     await all_genshinsign_recheck.send("已开始执行")
-    from GenshinUID.mihoyo_bot_feature.bot_cron import sign_at_night
+    from ..mihoyo_bot_feature.bot_cron import sign_at_night
     await sign_at_night()
 
+
 @all_bbscoin_recheck.handle()
-async def bbscoin_resign(bot:Bot, event: MessageEvent):
+async def bbscoin_resign(bot: Bot, event: MessageEvent):
     await all_bbscoin_recheck.send("已开始执行")
-    from GenshinUID.mihoyo_bot_feature.bot_cron import daily_mihoyo_bbs_sign
+    from ..mihoyo_bot_feature.bot_cron import daily_mihoyo_bbs_sign
     await daily_mihoyo_bbs_sign()
+
+
+"""
+开始获取米游币
+"""
+
+
+@get_mihoyo_coin.handle()
+async def send_mihoyo_coin(bot: Bot, event: MessageEvent):
+    im = None
+    await get_mihoyo_coin.send('开始操作……', at_sender=True)
+    try:
+        qid = int(event.sender.user_id)
+        im_mes = await mihoyo_coin(qid)
+        im = im_mes
+    except TypeError or AttributeError:
+        im = '没有找到绑定信息。'
+        logger.exception('获取米游币失败')
+    except Exception as e:
+        im = '发生错误 {},请检查后台输出。'.format(e)
+        logger.exception('获取米游币失败')
+    finally:
+        try:
+            await get_mihoyo_coin.send(im, at_sender=True)
+        except ActionFailed as e:
+            await get_mihoyo_coin.send('机器人发送消息失败：{}'.format(e.info['wording']))
+            logger.exception('发送签到信息失败')
