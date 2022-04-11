@@ -101,6 +101,8 @@ async def tell_master_func(bot: Bot, event: MessageEvent):
             im='群：{}，成员：{} 带话说：{}'.format(group_id,qid,message)
         else:
             im = '{} 带话说：{}'.format( qid, message)
+        yy='我这就去带话'
+        await tell_master_func.send(yy, at_sender=False)
         await bot.call_api(api='send_private_msg', **{'user_id': 271986756, 'message': im})
 
 
