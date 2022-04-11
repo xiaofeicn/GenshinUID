@@ -89,21 +89,18 @@ async def h_r(bot: Bot, event: GroupIncreaseNoticeEvent, state: T_State):  # eve
 # 带话
 @tell_master.handle()
 async def tell_master_func(bot: Bot, event: MessageEvent):
-    bot.get_group_info()
-    is_to_me=event.to_me
-    qid=event.user_id
-    group_id=event.group_id
-    logger.exception(bot.get_group_info(group_id))
+    is_to_me = event.to_me
+    qid = event.user_id
     if is_to_me:
         message = str(event.get_message()).strip().replace(
             '带话', "")
-        im =''
-        if group_id is not None:
-            im='群：{}，成员：{} 带话说：{}'.format(group_id,qid,message)
+        im = ''
+        if event.message_type == 'group':
+            im = '群：{}，成员：{} {} 带话说：{}'.format(event.groupid, event.sender.nickname,qid, message)
         else:
-            im = '{} 带话说：{}'.format( qid, message)
-        yy='我这就去带话'
-        await tell_master_func.send(yy, at_sender=False)
+            im = '{} {} 带话说：{}'.format(event.sender.nickname,qid, message)
+        yy = '我这就去带话'
+        await tell_master.send(yy, at_sender=False)
         await bot.call_api(api='send_private_msg', **{'user_id': 271986756, 'message': im})
 
 
