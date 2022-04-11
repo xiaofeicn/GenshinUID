@@ -1,12 +1,15 @@
 import base64
 
-from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith,on_message, require)
-from nonebot.adapters.cqhttp import (Bot, GROUP, GroupMessageEvent, MessageEvent, PRIVATE_FRIEND, MessageSegment)
+from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith, on_message, require, on_notice)
+from nonebot.adapters.cqhttp import (Bot, GROUP, GroupMessageEvent, MessageEvent, PRIVATE_FRIEND, MessageSegment,
+                                     GroupIncreaseNoticeEvent,Message)
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
 # sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 # from .get_data import *
+from nonebot.typing import T_State
+
 from .get_image import *
 from .get_mihoyo_bbs_data import *
 
@@ -29,6 +32,7 @@ get_enemies = on_startswith('原魔', priority=priority)
 get_audio = on_startswith('语音', priority=priority)
 get_artifacts = on_startswith('圣遗物', priority=priority)
 get_food = on_startswith('食物', priority=priority)
+tell_master = on_startswith('带话', priority=priority)
 
 get_uid_info = on_startswith("uid", priority=priority)
 get_mys_info = on_startswith("mys", priority=priority)
@@ -63,11 +67,42 @@ get_weapon_adv = on_regex('[\u4e00-\u9fa5]+(能给谁|给谁用|要给谁|谁能
 
 get_guide_pic = on_regex('[\u4e00-\u9fa5]+(推荐|攻略)', priority=priority)
 
+welcom = on_notice()
+
 use_book = on_command("fqhelp", priority=priority)
 chat = on_message(priority=10)
 FILE_PATH = os.path.join(os.path.join(os.path.dirname(__file__), 'mihoyo_libs'), 'mihoyo_bbs')
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
 TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
+
+
+# 群友入群
+@welcom.handle()  # 监听 welcom
+async def h_r(bot: Bot, event: GroupIncreaseNoticeEvent, state: T_State):  # event: GroupIncreaseNoticeEvent  群成员增加事件
+    user = event.get_user_id()  # 获取新成员的id
+    at_ = "本群通过祈愿召唤了旅行者：[CQ:at,qq={}]".format(user)
+    msg = at_ + '欢迎：\n 派蒙好伙伴、捕风的异乡人、蒙德荣誉骑士、脱手型元素专家、一锅乱炖小食神、风魔龙净化者、雪山派炼金术师、秘境闯关人、地图收割机、萍姥姥冲击波受益者、滴水不沾外卖员、海灯节霄灯制作人、尘歌壶洞主、浪船驾驶员、七七守护人、公子好基友、若坨再度封印推动者、神里心上人、心海心情增益量、申鹤红绳羁绊者、女士被灭助推器、海祈岛第一战力、鹤观无尽轮回终结者、渊下宫传承人、深渊破坏者、天空岛顶级通缉犯、提瓦特故事见证人，杀怪放火第一人、世人敬仰旅行者'
+    msg = Message(msg)
+    print(at_)
+    # if event.group_id == QQ群号:
+    await welcom.finish(message=Message(f'{msg}'))  # 发送消息
+
+# 带话
+@tell_master.handle()
+async def tell_master_func(bot: Bot, event: MessageEvent):
+    is_to_me=event.to_me
+    qid=event.user_id
+    group_id=event.group_id
+    if is_to_me:
+        message = str(event.get_message()).strip().replace(
+            '带话', "")
+        im =''
+        if group_id is not None:
+            im='群：{}，成员：{} 带话说：{}'.format(group_id,qid,message)
+        else:
+            im = '{} 带话说：{}'.format( qid, message)
+        await bot.call_api(api='send_private_msg', **{'user_id': 271986756, 'message': im})
+
 
 @chat.handle()
 async def use_chat_func(bot: Bot, event: MessageEvent):
