@@ -20,10 +20,10 @@ get_uid_info = on_startswith("#uid", priority=priority)
 get_mys_info = on_startswith("#mys", priority=priority)
 search = on_command("查询", priority=priority)
 
-
 """
 查询uid 的命令
 """
+
 
 @get_uid_info.handle()
 async def send_uid_info(bot: Bot, event: MessageEvent):
@@ -102,6 +102,7 @@ async def send_uid_info(bot: Bot, event: MessageEvent):
 """
 查询米游社通行证 的命令
 """
+
 
 @get_mys_info.handle()
 async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
@@ -183,6 +184,7 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
 """
 绑定过uid/mysid的情况下，可以查询，默认优先调用米游社通行证，多出世界等级一个参数
 """
+
 
 @search.handle()
 async def get_info(bot: Bot, event: MessageEvent):

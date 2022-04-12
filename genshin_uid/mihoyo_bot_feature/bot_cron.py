@@ -21,6 +21,8 @@ clean_cache_schedule = require("nonebot_plugin_apscheduler").scheduler
 resin_notic_schedule = require("nonebot_plugin_apscheduler").scheduler
 daily_sign_schedule = require("nonebot_plugin_apscheduler").scheduler
 daily_mihoyo_bbs_sign_schedule = require("nonebot_plugin_apscheduler").scheduler
+
+
 @draw_event_schedule.scheduled_job('cron', hour='2')
 async def draw_event():
     await draw_event_pic()
@@ -53,16 +55,18 @@ async def push():
             else:
                 await bot.call_api(api='send_group_msg',
                                    **{'group_id': i['gid'],
-                                      'message' : MessageSegment.at(i['qid']) + f'\n{i["message"]}'})
+                                      'message': MessageSegment.at(i['qid']) + f'\n{i["message"]}'})
 
 
 """
  每日零点半进行米游社签到
 """
 
+
 @daily_sign_schedule.scheduled_job('cron', hour='0', minute='30')
 async def sign_at_night():
     await daily_sign()
+
 
 async def daily_sign():
     bot = get_bot()
@@ -133,6 +137,7 @@ async def daily_sign():
 @daily_mihoyo_bbs_sign_schedule.scheduled_job('cron', hour='0', minute='50')
 async def sign_at_night():
     await daily_mihoyo_bbs_sign()
+
 
 async def daily_mihoyo_bbs_sign():
     bot = get_bot()

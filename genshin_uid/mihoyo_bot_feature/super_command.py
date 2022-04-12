@@ -21,6 +21,7 @@ check = on_command("校验全部Cookies", permission=SUPERUSER, priority=priorit
 校验Cookies 是否正常的功能，不正常自动删掉
 """
 
+
 @check.handle()
 async def check_cookies(bot: Bot):
     try:
