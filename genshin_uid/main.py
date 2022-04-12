@@ -96,7 +96,7 @@ async def tell_master_func(bot: Bot, event: MessageEvent):
             '带话', "")
         im = ''
         if event.message_type == 'group':
-            im = '群：{}，成员：{} {} 带话说：{}'.format(event.groupid, event.sender.nickname,qid, message)
+            im = '群：{}，成员：{} {} 带话说：{}'.format(event.group_id, event.sender.nickname,qid, message)
         else:
             im = '{} {} 带话说：{}'.format(event.sender.nickname,qid, message)
         yy = '我这就去带话'
