@@ -94,7 +94,7 @@ async def get_yao_gua(gua):
     up = base_yao_to_gua(up_yao_list)
     down_yao_list = yao_list[3:6]
     down = base_yao_to_gua(down_yao_list)
-    return [base_gua_name_map[up],base_gua_name_map[down]]
+    return [base_gua_name_map[up].decode('utf-8'),base_gua_name_map[down].decode('utf-8')]
 
 async def paragraph(txt_,sum_width):
     paragraph = ""
