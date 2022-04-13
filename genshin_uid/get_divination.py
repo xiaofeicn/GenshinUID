@@ -123,8 +123,8 @@ async def calculate_with_plum_flower(uid,nickname):
     # 起上卦
     # print("使用梅花易数♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣")
     func="梅花易数"
-    draw.text((900, 100), func, fill="#8B4513", font=bt)
-    draw.text((800, 190), nickname, fill="#8B4513", font=bt)
+    draw.text((900, 100), nickname, fill="#8B4513", font=bt)
+    draw.text((900, 190), func, fill="#8B4513", font=bt)
     # print_a_wait_animation("卜上卦：", fake_delay)
     unit = 3600 * 24
     print(int(time.time()) / unit * unit - 8 * 3600 +uid)
