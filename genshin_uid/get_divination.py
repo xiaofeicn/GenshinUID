@@ -26,7 +26,7 @@ fake_delay = 10
 
 
 # 读取别卦数据
-def init_gua_data(json_path):
+async def init_gua_data(json_path):
     with open(gua_data_path, 'r', encoding='utf8')as fp:
         global gua_data_map
         gua_data_map = json.load(fp)
@@ -45,7 +45,7 @@ base_gua_name_map = {
 
 
 # 数字转化为二进制数组
-def base_gua_to_yao(gua, yao_length=3):
+async def base_gua_to_yao(gua, yao_length=3):
     result = []
     while gua >= 1:
         level = 0 if gua % 2 == 0 else 1
@@ -57,7 +57,7 @@ def base_gua_to_yao(gua, yao_length=3):
 
 
 # 二进制数组转化为数字
-def base_yao_to_gua(array):
+async def base_yao_to_gua(array):
     array = array[:]
     while len(array) > 0 and array[-1] == 0:
         array.pop()
@@ -71,7 +71,7 @@ def base_yao_to_gua(array):
 
 
 # 打印一个挂
-def print_gua(gua):
+async def print_gua(gua):
     yao_list = base_gua_to_yao(gua, 6)
     up_yao_list = yao_list[0:3]
     up = base_yao_to_gua(up_yao_list)
@@ -88,7 +88,7 @@ def print_gua(gua):
     print(yao_icon_map[down_yao_list[1]] + " " + base_gua_name_map[down])
     print(yao_icon_map[down_yao_list[0]])
 
-def get_yao_gua(gua):
+async def get_yao_gua(gua):
     yao_list = base_gua_to_yao(gua, 6)
     up_yao_list = yao_list[0:3]
     up = base_yao_to_gua(up_yao_list)
@@ -96,7 +96,7 @@ def get_yao_gua(gua):
     down = base_yao_to_gua(down_yao_list)
     return [base_gua_name_map[up],base_gua_name_map[down]]
 
-def paragraph(txt_,sum_width):
+async def paragraph(txt_,sum_width):
     paragraph = ""
     # 宽度总和
 
@@ -113,7 +113,7 @@ def paragraph(txt_,sum_width):
     return paragraph
 # 使用梅花易数
 async def calculate_with_plum_flower(uid,nickname):
-    init_gua_data(gua_data_path)
+    await init_gua_data(gua_data_path)
     # bt = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 80)
     # gt = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 36)
     # gy = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 55)
@@ -132,23 +132,23 @@ async def calculate_with_plum_flower(uid,nickname):
 
     # up_base_gua = int(round(time.time() * 1000)) % 8
     up_base_gua = int(round(tt)) % 8
-    up_yao_array = base_gua_to_yao(up_base_gua)
+    up_yao_array = await base_gua_to_yao(up_base_gua)
     # draw.text((260, 80), base_gua_name_map[up_base_gua], fill="#363636", font=bt)
     draw.text((260, 80), base_gua_name_map[up_base_gua], fill="#8B4513", font=bt)
     # # 起下卦
     # print_a_wait_animation("正在获取下卦：", fake_delay)
     down_base_gua = random.randint(0, 999999999999) % 8
-    down_yao_array = base_gua_to_yao(down_base_gua)
+    down_yao_array = await base_gua_to_yao(down_base_gua)
 
     draw.text((260, 190), base_gua_name_map[down_base_gua], fill="#8B4513", font=bt)
     # # 组成卦象
     # print_a_wait_animation("正在组成本卦：", fake_delay)
     # print("------------------------------------------------本卦------------------------------------------------")
     yao_list = up_yao_array + down_yao_array
-    gua = base_yao_to_gua(yao_list)
+    gua = await base_yao_to_gua(yao_list)
 
     # print_gua(gua)
-    up_yao,down_yao=get_yao_gua(gua)
+    up_yao,down_yao=await get_yao_gua(gua)
     draw.text((330, 335), up_yao, fill="#8B4513", font=gy)
     draw.text((500, 335), down_yao, fill="#8B4513", font=gy)
     # # 读取本卦象信息
@@ -169,15 +169,15 @@ async def calculate_with_plum_flower(uid,nickname):
     # print("------------------------------------------------互卦------------------------------------------------")
     # 读取互卦象信息
     up_hu_yao_list = [yao_list[4], yao_list[5], yao_list[0]]
-    up_hu_gua = base_yao_to_gua(up_hu_yao_list)
+    up_hu_gua = await base_yao_to_gua(up_hu_yao_list)
     down_hu_yao_list = [yao_list[5], yao_list[0], yao_list[1]]
-    down_hu_gua = base_yao_to_gua(down_hu_yao_list)
+    down_hu_gua = await base_yao_to_gua(down_hu_yao_list)
     hu_yao_list = up_hu_yao_list + down_hu_yao_list
-    hu_gua = base_yao_to_gua(hu_yao_list)
+    hu_gua =await base_yao_to_gua(hu_yao_list)
     hu_gua_code = str(base_gua_name_map[up_hu_gua]) + str(base_gua_name_map[down_hu_gua])
     hu_gua_data = gua_data_map[hu_gua_code]
     # print_gua(hu_gua)
-    up_yao,down_yao=get_yao_gua(hu_gua)
+    up_yao,down_yao=await get_yao_gua(hu_gua)
     # print(up_yao,down_yao)
 
     draw.text((950, 335), up_yao, fill="#8B4513", font=gy)
@@ -195,11 +195,11 @@ async def calculate_with_plum_flower(uid,nickname):
     change_yao_list = yao_list[:]
     change_yao_list[change_index] = 0 if change_yao_list[change_index] == 1 else 1
     up_change_yao_list = change_yao_list[0:3]
-    up_change_gua = base_yao_to_gua(up_change_yao_list)
+    up_change_gua = await base_yao_to_gua(up_change_yao_list)
     down_change_yao_list = change_yao_list[3:5]
-    down_change_gua = base_yao_to_gua(down_change_yao_list)
+    down_change_gua = await base_yao_to_gua(down_change_yao_list)
 
-    change_gua = base_yao_to_gua(change_yao_list)
+    change_gua = await base_yao_to_gua(change_yao_list)
     # print_gua(change_gua)
 
     up_yao,down_yao=get_yao_gua(change_gua)
@@ -228,7 +228,7 @@ async def calculate_with_plum_flower(uid,nickname):
     return resultmes
 
 
-def print_a_wait_animation(tips, times):
+async def print_a_wait_animation(tips, times):
     animation = "|/-\\"
     idx = 0
     for i in range(times):
