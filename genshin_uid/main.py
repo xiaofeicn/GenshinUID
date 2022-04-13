@@ -12,6 +12,7 @@ from nonebot.typing import T_State
 
 from .get_image import *
 from .get_mihoyo_bbs_data import *
+from .get_divination import *
 
 config = get_driver().config
 priority = config.genshinuid_priority if config.genshinuid_priority else 2
@@ -49,6 +50,7 @@ link_uid = on_startswith('绑定uid', priority=priority)
 
 monthly_data = on_command('每月统计', priority=priority)
 daily_data = on_command('当前状态', priority=priority)
+divination = on_command('卜卦', priority=priority)
 
 get_genshin_info = on_command('当前信息', priority=priority)
 
@@ -85,6 +87,19 @@ TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
 #     msg = Message(msg)
 #
 #     await welcom.finish(message=Message(f'{msg}'))  # 发送消息
+
+@divination.handle()
+async def send_divination_pic(bot: Bot, event: MessageEvent):
+
+    try:
+        im = await calculate_with_plum_flower(event.sender.user_id, event.sender.nickname)
+        if im.startswith('base64://'):
+            await divination.send(MessageSegment.image(im), at_sender=False)
+        else:
+            await divination.send(im, at_sender=False)
+    except ActionFailed as e:
+        await search.send('机器人发送消息失败：{}'.format(e.info['wording']))
+        logger.exception('发送uid信息失败')
 
 # 带话
 @tell_master.handle()
