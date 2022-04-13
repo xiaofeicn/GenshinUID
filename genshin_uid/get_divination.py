@@ -112,7 +112,7 @@ def paragraph(txt_,sum_width):
             line_len = 0
     return paragraph
 # 使用梅花易数
-def calculate_with_plum_flower(uid,nickname):
+async def calculate_with_plum_flower(uid,nickname):
     init_gua_data(gua_data_path)
     # bt = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 80)
     # gt = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 36)
