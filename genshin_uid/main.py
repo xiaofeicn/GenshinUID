@@ -90,6 +90,7 @@ TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
 
 @divination.handle()
 async def send_divination_pic(bot: Bot, event: MessageEvent):
+    logger.exception(event.get_message+"sss")
 
     try:
         im = await calculate_with_plum_flower(event.sender.user_id, event.sender.nickname)
