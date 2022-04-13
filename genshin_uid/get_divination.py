@@ -72,7 +72,7 @@ async def base_yao_to_gua(array):
 
 # 打印一个挂
 async def print_gua(gua):
-    yao_list = base_gua_to_yao(gua, 6)
+    yao_list = await base_gua_to_yao(gua, 6)
     up_yao_list = yao_list[0:3]
     up = base_yao_to_gua(up_yao_list)
 
@@ -89,7 +89,7 @@ async def print_gua(gua):
     print(yao_icon_map[down_yao_list[0]])
 
 async def get_yao_gua(gua):
-    yao_list = base_gua_to_yao(gua, 6)
+    yao_list =await base_gua_to_yao(gua, 6)
     up_yao_list = yao_list[0:3]
     up = base_yao_to_gua(up_yao_list)
     down_yao_list = yao_list[3:6]
