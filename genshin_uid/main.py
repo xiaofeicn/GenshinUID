@@ -2,7 +2,7 @@ import base64
 
 from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith, on_message, require, on_notice)
 from nonebot.adapters.cqhttp import (Bot, GROUP, GroupMessageEvent, MessageEvent, PRIVATE_FRIEND, MessageSegment,
-                                     GroupIncreaseNoticeEvent,Message)
+                                     GroupIncreaseNoticeEvent, Message)
 from nonebot.adapters.cqhttp.exception import ActionFailed
 from nonebot.permission import SUPERUSER
 
@@ -39,8 +39,9 @@ get_uid_info = on_startswith("uid", priority=priority)
 get_mys_info = on_startswith("mys", priority=priority)
 
 get_event = on_command('活动列表', priority=priority)
+get_weekly_pic = on_command('周本', priority=priority)
 get_lots = on_command('御神签', priority=priority)
-get_help = on_command('help',aliases={'帮助'}, priority=priority)
+get_help = on_command('help', aliases={'帮助'}, priority=priority)
 
 open_switch = on_startswith('开启', priority=priority)
 close_switch = on_startswith('关闭', priority=priority)
@@ -102,6 +103,17 @@ async def send_divination_pic(bot: Bot, event: MessageEvent):
         await search.send('机器人发送消息失败：{}'.format(e.info['wording']))
         logger.exception('发送uid信息失败')
 
+
+@get_weekly_pic.handle()
+async def send_weekly_pic(bot: Bot, event: MessageEvent):
+    try:
+        str = '2022/03/29/75833613/7cef666b6a5fa3f12785e6e4406a060f_4832769786132969938.png'
+        url = 'https://uploadstatic.mihoyo.com/ys-obc/{}'.format(str)
+        await get_guide_pic.send(MessageSegment.image(url))
+    except Exception:
+        logger.exception('获取周本失败。')
+
+
 # 带话
 @tell_master.handle()
 async def tell_master_func(bot: Bot, event: MessageEvent):
@@ -112,9 +124,9 @@ async def tell_master_func(bot: Bot, event: MessageEvent):
             '带话', "")
         im = ''
         if event.message_type == 'group':
-            im = '群：{}，成员：{} {} 带话说：{}'.format(event.group_id, event.sender.nickname,qid, message)
+            im = '群：{}，成员：{} {} 带话说：{}'.format(event.group_id, event.sender.nickname, qid, message)
         else:
-            im = '{} {} 带话说：{}'.format(event.sender.nickname,qid, message)
+            im = '{} {} 带话说：{}'.format(event.sender.nickname, qid, message)
         yy = '我这就去带话'
         await tell_master.send(yy, at_sender=False)
         await bot.call_api(api='send_private_msg', **{'user_id': 271986756, 'message': im})
@@ -137,6 +149,7 @@ async def use_chat_func(bot: Bot, event: MessageEvent):
             await chat.send(im, at_sender=False)
     except ActionFailed as e:
         await chat.send(im)
+
 
 @use_book.handle()
 async def use_book_func(bot: Bot, event: MessageEvent):
@@ -166,6 +179,7 @@ async def use_book_func(bot: Bot, event: MessageEvent):
         await use_book.send("机器人发送消息失败：{}".format(e.info['wording']))
         logger.exception("发送签到信息失败")
 
+
 @draw_event_schedule.scheduled_job('cron', hour='2')
 async def draw_event():
     await draw_event_pic()
@@ -189,13 +203,14 @@ async def push():
             else:
                 await bot.call_api(api='send_group_msg',
                                    **{'group_id': i['gid'],
-                                      'message' : MessageSegment.at(i['qid']) + f'\n{i["message"]}'})
+                                      'message': MessageSegment.at(i['qid']) + f'\n{i["message"]}'})
 
 
 # 每日零点半进行米游社签到
 @daily_sign_schedule.scheduled_job('cron', hour='0', minute='30')
 async def sign_at_night():
     await daily_sign()
+
 
 async def daily_sign():
     bot = get_bot()
@@ -289,10 +304,11 @@ async def daily_mihoyo_bbs_sign():
                 logger.exception(f'{im} Error')
     logger.info('已结束。')
 
+
 @get_help.handle()
 async def send_help_pic(bot: Bot, event: MessageEvent):
     try:
-        help_path = os.path.join(INDEX_PATH,'help.png')
+        help_path = os.path.join(INDEX_PATH, 'help.png')
         f = open(help_path, 'rb')
         ls_f = b64encode(f.read()).decode()
         img_mes = 'base64://' + ls_f
@@ -301,11 +317,12 @@ async def send_help_pic(bot: Bot, event: MessageEvent):
     except Exception:
         logger.exception('获取帮助失败。')
 
+
 @get_guide_pic.handle()
 async def send_guide_pic(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(' ', '')[:-2]
-        with open(os.path.join(INDEX_PATH,'char_alias.json'),'r',encoding='utf8')as fp:
+        with open(os.path.join(INDEX_PATH, 'char_alias.json'), 'r', encoding='utf8')as fp:
             char_data = json.load(fp)
         name = message
         for i in char_data:
@@ -315,11 +332,12 @@ async def send_guide_pic(bot: Bot, event: MessageEvent):
                 for k in char_data[i]:
                     if message in k:
                         name = i
-        #name = str(event.get_message()).strip().replace(' ', '')[:-2]
+        # name = str(event.get_message()).strip().replace(' ', '')[:-2]
         url = 'https://img.genshin.minigg.cn/guide/{}.jpg'.format(name)
         await get_guide_pic.send(MessageSegment.image(url))
     except Exception:
         logger.exception('获取建议失败。')
+
 
 @get_char_adv.handle()
 async def send_char_adv(bot: Bot, event: MessageEvent):
