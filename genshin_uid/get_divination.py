@@ -15,7 +15,7 @@ bt = ImageFont.truetype(os.path.join(INDEX_PATH,"YangRenDongZhuShiTi-Regular-2.t
 gt = ImageFont.truetype(os.path.join(INDEX_PATH,"YangRenDongZhuShiTi-Regular-2.ttf"), 36)
 gy = ImageFont.truetype(os.path.join(INDEX_PATH,"YangRenDongZhuShiTi-Regular-2.ttf"), 55)
 cx = ImageFont.truetype(os.path.join(INDEX_PATH,"YangRenDongZhuShiTi-Regular-2.ttf"), 24)
-img = Image.open(os.path.join(INDEX_PATH,"bugua.png"))
+
 
 
 # 别卦数据
@@ -119,6 +119,7 @@ async def calculate_with_plum_flower(uid,nickname):
     # gy = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 55)
     # cx = ImageFont.truetype("font/YangRenDongZhuShiTi-Regular-2.ttf", 24)
     # img = Image.open("bugua.png")
+    img = Image.open(os.path.join(INDEX_PATH, "bugua.png"))
     draw = ImageDraw.Draw(img)
     # 起上卦
     # print("使用梅花易数♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣️♣")
