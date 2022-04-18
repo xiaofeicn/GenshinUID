@@ -11,7 +11,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # 忽略PEP8 E402 module level import not at top of file 警告
 from .get_data import *  # noqa: E402
 from .get_image import draw_event_pic  # noqa: E402
-import get_mihoyo_bbs_coin as coin  # noqa: E402
+# import get_mihoyo_bbs_coin as coin  # noqa: E402
+from .get_mihoyo_bbs_coin import MihoyoBBSCoin
 
 FILE_PATH = os.path.dirname(__file__)
 FILE2_PATH = os.path.join(FILE_PATH, 'mihoyo_libs/mihoyo_bbs')
@@ -528,7 +529,7 @@ async def mihoyo_coin(qid, s_cookies=None):
         s_cookies = await get_stoken(uid)
 
     if s_cookies:
-        get_coin = coin.MihoyoBBSCoin(s_cookies)
+        get_coin = MihoyoBBSCoin(s_cookies)
         im = await get_coin.task_run()
     else:
         im = '你还没有绑定Stoken~'
