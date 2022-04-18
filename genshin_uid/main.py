@@ -13,6 +13,7 @@ from nonebot.typing import T_State
 from .get_image import *
 from .get_mihoyo_bbs_data import *
 from .get_divination import *
+from .get_character_name import *
 
 config = get_driver().config
 priority = config.genshinuid_priority if config.genshinuid_priority else 2
@@ -322,16 +323,17 @@ async def send_help_pic(bot: Bot, event: MessageEvent):
 async def send_guide_pic(bot: Bot, event: MessageEvent):
     try:
         message = str(event.get_message()).strip().replace(' ', '')[:-2]
-        with open(os.path.join(INDEX_PATH, 'char_alias.json'), 'r', encoding='utf8')as fp:
-            char_data = json.load(fp)
-        name = message
-        for i in char_data:
-            if message in i:
-                name = i
-            else:
-                for k in char_data[i]:
-                    if message in k:
-                        name = i
+        # with open(os.path.join(INDEX_PATH, 'char_alias.json'), 'r', encoding='utf8')as fp:
+        #     char_data = json.load(fp)
+        name=get_char_name_json(message)
+        # name = message
+        # for i in char_data:
+        #     if message in i:
+        #         name = i
+        #     else:
+        #         for k in char_data[i]:
+        #             if message in k:
+        #                 name = i
         # name = str(event.get_message()).strip().replace(' ', '')[:-2]
         url = 'https://img.genshin.minigg.cn/guide/{}.jpg'.format(name)
         await get_guide_pic.send(MessageSegment.image(url))
