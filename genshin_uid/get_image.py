@@ -1145,6 +1145,7 @@ async def draw_pic(uid: str, nickname: str, image: Optional[Match] = None, mode:
     cht=''
     if uid=='110692802':
         cht='称号 家里有矿·提瓦特矿脉终结者'
+        text_draw.text((140, 73), cht, text_color, genshin_font(20))
     if role_level:
         text_draw.text((140, 200), '冒险等级：' + f'{role_level}', text_color, genshin_font(20))
 
