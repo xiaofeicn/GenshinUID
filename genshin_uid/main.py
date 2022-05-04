@@ -47,6 +47,7 @@ get_artifacts = on_startswith('圣遗物', priority=priority)
 get_food = on_startswith('食物', priority=priority)
 tell_master = on_startswith('带话', priority=priority)
 
+chat = on_message(priority=10)
 get_uid_info = on_startswith('uid', priority=priority)
 get_mys_info = on_startswith('mys', priority=priority)
 
@@ -55,8 +56,8 @@ get_weekly_pic = on_command('周本', priority=priority)
 get_lots = on_command('御神签', priority=priority)
 get_help = on_command('help', aliases={'帮助'}, priority=priority)
 
-open_switch = on_startswith('gs开启', priority=priority)
-close_switch = on_startswith('gs关闭', priority=priority)
+open_switch = on_startswith('开启', priority=priority)
+close_switch = on_startswith('关闭', priority=priority)
 
 link_mys = on_startswith('绑定mys', priority=priority)
 link_uid = on_startswith('绑定uid', priority=priority)
@@ -123,6 +124,39 @@ class ImageAndAt:
         except IndexError:
             return None
 
+@chat.handle()
+async def use_chat_func(bot: Bot, event: MessageEvent):
+    target = 'https://api.ownthink.com/bot?appid=f40e478ad5d244b3b286807ec5b46880&userid=user&spoken='
+    im = "干什么？"
+    message = str(event.get_message()).strip().replace(
+        ' ', "")
+    # logger.exception(event.to_me)
+    m = event.get_plaintext()
+    yd = event.to_me
+    try:
+        if yd:
+            tmp = target + m
+            res = requests.get(tmp)
+            im = str(res.json()['data']['info']['text']).replace("小思", "派蒙").replace("思知", "提瓦特")
+            await chat.send(im, at_sender=False)
+    except ActionFailed as e:
+        await chat.send(im)
+# 带话
+@tell_master.handle()
+async def tell_master_func(bot: Bot, event: MessageEvent):
+    is_to_me = event.to_me
+    qid = event.user_id
+    if is_to_me:
+        message = str(event.get_message()).strip().replace(
+            '带话', "")
+        im = ''
+        if event.message_type == 'group':
+            im = '群：{}，成员：{} {} 带话说：{}'.format(event.group_id, event.sender.nickname, qid, message)
+        else:
+            im = '{} {} 带话说：{}'.format(event.sender.nickname, qid, message)
+        yy = '我这就去带话'
+        await tell_master.send(yy, at_sender=False)
+        await bot.call_api(api='send_private_msg', **{'user_id': 271986756, 'message': im})
 
 @schedule.scheduled_job('cron', hour='2')
 async def draw_event():
