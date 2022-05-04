@@ -87,6 +87,7 @@ FILE_PATH = os.path.join(os.path.join(os.path.dirname(__file__), 'mihoyo_libs'),
 INDEX_PATH = os.path.join(FILE_PATH, 'index')
 TEXTURE_PATH = os.path.join(FILE_PATH, 'texture2d')
 
+
 # https://v2.nonebot.dev/docs/advanced/di/dependency-injection#class-%E4%BD%9C%E4%B8%BA%E4%BE%9D%E8%B5%96
 class ImageAndAt:
     def __init__(self, event: MessageEvent):
@@ -95,7 +96,9 @@ class ImageAndAt:
         for i in event.message:
             if i.type == "image":
                 data = i.data
-                if url := data.get("url"):
+                # if url := data.get("url"):
+                if data.get("url") is not None:
+                    url = data.get("url")
                     self.images.append(url)
                 else:
                     continue
@@ -119,6 +122,7 @@ class ImageAndAt:
             return self.at[0]
         except IndexError:
             return None
+
 
 @schedule.scheduled_job('cron', hour='2')
 async def draw_event():
@@ -148,10 +152,10 @@ async def push():
                 await bot.call_api(api='send_group_msg',
                                    **{
                                        'group_id':
-                                            i['gid'],
+                                           i['gid'],
                                        'message':
-                                            MessageSegment.at(i['qid']) +
-                                            f'\n{i["message"]}'
+                                           MessageSegment.at(i['qid']) +
+                                           f'\n{i["message"]}'
                                    })
 
 
@@ -166,7 +170,7 @@ async def daily_sign():
     conn = sqlite3.connect('ID_DATA.db')
     c = conn.cursor()
     cursor = c.execute('SELECT *  FROM NewCookiesTable WHERE StatusB != ?',
-                       ('off', ))
+                       ('off',))
     c_data = cursor.fetchall()
     temp_list = []
     for row in c_data:
@@ -253,7 +257,7 @@ async def daily_mihoyo_bbs_sign():
     conn = sqlite3.connect('ID_DATA.db')
     c = conn.cursor()
     cursor = c.execute('SELECT *  FROM NewCookiesTable WHERE StatusC != ?',
-                       ('off', ))
+                       ('off',))
     c_data = cursor.fetchall()
     logger.info(c_data)
     for row in c_data:
@@ -323,7 +327,7 @@ async def send_guide_pic(bot: Bot, event: MessageEvent):
                 for k in char_data[i]:
                     if message in k:
                         name = i
-        #name = str(event.get_message()).strip().replace(' ', '')[:-2]
+        # name = str(event.get_message()).strip().replace(' ', '')[:-2]
         url = 'https://img.genshin.minigg.cn/guide/{}.jpg'.format(name)
         await get_guide_pic.send(MessageSegment.image(url))
     except Exception:
@@ -571,7 +575,7 @@ async def open_switch_func(bot: Bot, event: MessageEvent):
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
 
         qid = int(event.sender.user_id)
-        #at = re.search(r'\[CQ:at,qq=(\d*)]', message)
+        # at = re.search(r'\[CQ:at,qq=(\d*)]', message)
 
         if m == '自动签到':
             try:
@@ -653,7 +657,7 @@ async def close_switch_func(bot: Bot, event: MessageEvent):
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
 
         qid = int(event.sender.user_id)
-        #at = re.search(r'\[CQ:at,qq=(\d*)]', message)
+        # at = re.search(r'\[CQ:at,qq=(\d*)]', message)
 
         if m == '自动签到':
             try:
@@ -724,10 +728,10 @@ async def send_genshin_info(bot: Bot, event: MessageEvent):
     try:
         image = ImageAndAt(event)
         image = image.get_first_image()
-        #message = str(event.get_message()).strip().replace(' ', '')
+        # message = str(event.get_message()).strip().replace(' ', '')
         qid = int(event.sender.user_id)
         uid = await select_db(qid, mode='uid')
-        #image = re.search(r'\[CQ:image,file=(.*),url=(.*)]', message)
+        # image = re.search(r'\[CQ:image,file=(.*),url=(.*)]', message)
         uid = uid[0]
         im = await draw_info_pic(uid, image)
         await get_genshin_info.send(MessageSegment.image(im), at_sender=True)
@@ -811,9 +815,9 @@ async def check_cookies(bot: Bot):
             await bot.call_api(api='send_private_msg',
                                **{
                                    'user_id':
-                                        i[0],
+                                       i[0],
                                    'message':
-                                        ('您绑定的Cookies（uid{}）已失效，以下功能将会受到影响：\n'
+                                       ('您绑定的Cookies（uid{}）已失效，以下功能将会受到影响：\n'
                                         '查看完整信息列表\n查看深渊配队\n自动签到/当前状态/每月统计\n'
                                         '请及时重新绑定Cookies并重新开关相应功能。').format(i[1])
                                })
@@ -977,7 +981,7 @@ async def get_info(bot: Bot, event: MessageEvent):
         at = re.search(r'\[CQ:at,qq=(\d*)]', message)
         """
         if at:
-            #qid = at
+            # qid = at
             mi = await bot.call_api(
                 'get_group_member_info', **{
                     'group_id': event.group_id,
@@ -1092,7 +1096,7 @@ async def send_mihoyo_bbs_info(bot: Bot, event: MessageEvent):
         image = image.get_first_image()
         message = str(event.get_message()).strip().replace(' ', '').replace(
             'mys', '')
-        #image = re.search(r'\[CQ:image,file=(.*),url=(.*)]', message)
+        # image = re.search(r'\[CQ:image,file=(.*),url=(.*)]', message)
         uid = re.findall(r'\d+', message)[0]  # str
         m = ''.join(re.findall('[\u4e00-\u9fa5]', message))
         if m == '深渊':
