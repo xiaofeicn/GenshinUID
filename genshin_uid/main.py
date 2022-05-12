@@ -67,7 +67,7 @@ get_genshin_info = on_command('当前信息', priority=priority)
 
 add_cookie = on_startswith('添加', permission=PRIVATE_FRIEND, priority=priority)
 
-search = on_command('查询', permission=GROUP, priority=priority)
+search = on_command('查询', priority=priority)
 get_sign = on_command('签到', priority=priority)
 get_mihoyo_coin = on_command('开始获取米游币', priority=priority)
 check = on_command('校验全部Cookies', priority=priority)
