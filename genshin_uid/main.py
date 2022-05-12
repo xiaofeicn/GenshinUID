@@ -1,10 +1,7 @@
 import base64
 from typing import Union
 
-from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith, on_message, require, on_notice)
-from nonebot.adapters.cqhttp import (Bot, GROUP, GroupMessageEvent, MessageEvent, PRIVATE_FRIEND, MessageSegment,
-                                     GroupIncreaseNoticeEvent, Message)
-from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith,
+from nonebot import (get_bot, get_driver, on_command, on_regex, on_startswith,on_message,
                      require)
 from nonebot.adapters.cqhttp import (Bot, GROUP, GroupMessageEvent,
                                      MessageEvent, MessageSegment,
