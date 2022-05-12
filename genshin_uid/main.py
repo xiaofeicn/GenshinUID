@@ -167,27 +167,27 @@ async def clean_cache():
 
 
 # 每隔半小时检测树脂是否超过设定值
-# @schedule.scheduled_job('cron', minute='*/30')
-# async def push():
-#     bot = get_bot()
-#     now_data = await daily()
-#     if now_data is not None:
-#         for i in now_data:
-#             if i['gid'] == 'on':
-#                 await bot.call_api(api='send_private_msg',
-#                                    **{
-#                                        'user_id': i['qid'],
-#                                        'message': i['message']
-#                                    })
-#             else:
-#                 await bot.call_api(api='send_group_msg',
-#                                    **{
-#                                        'group_id':
-#                                            i['gid'],
-#                                        'message':
-#                                            MessageSegment.at(i['qid']) +
-#                                            f'\n{i["message"]}'
-#                                    })
+@schedule.scheduled_job('cron', minute='*/30')
+async def push():
+    bot = get_bot()
+    now_data = await daily()
+    if now_data is not None:
+        for i in now_data:
+            if i['gid'] == 'on':
+                await bot.call_api(api='send_private_msg',
+                                   **{
+                                       'user_id': i['qid'],
+                                       'message': i['message']
+                                   })
+            else:
+                await bot.call_api(api='send_group_msg',
+                                   **{
+                                       'group_id':
+                                           i['gid'],
+                                       'message':
+                                           MessageSegment.at(i['qid']) +
+                                           f'\n{i["message"]}'
+                                   })
 
 
 # 每日零点半进行米游社签到
